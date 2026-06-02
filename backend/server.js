@@ -446,6 +446,7 @@ app.post('/api/feedback', (req, res) => {
   });
   writeDb(db);
 
+  console.log('Feedback recibido. Mailer:', mailer ? 'configurado' : 'NO configurado', '| GMAIL_USER:', process.env.GMAIL_USER || 'NO SET');
   if (mailer) {
     const accountType = db.users.find(u => u.id === parseInt(user_id))?.account_type;
     const accountLabel = accountType === 'store' ? '🏪 Tienda Vintage' : accountType === 'person' ? '👤 Persona' : '—';
@@ -466,7 +467,7 @@ app.post('/api/feedback', (req, res) => {
       to: 'n8nautomatizacionesnacho@gmail.com',
       subject: `[SwapWear] ${tipo} de ${username || 'Anónimo'}`,
       html,
-    }).catch(err => console.error('Error enviando email:', err.message));
+    }).then(() => console.log('Email enviado OK')).catch(err => console.error('Error enviando email:', err.message));
   }
 
   res.json({ success: true });
