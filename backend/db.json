@@ -1,9 +1,1212 @@
 {
-  "users": [],
-  "items": [],
-  "swipes": [],
+  "users": [
+    {
+      "id": 1,
+      "firebase_uid": "bot_marti",
+      "username": "marti_styles",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.494Z"
+    },
+    {
+      "id": 2,
+      "firebase_uid": "bot_nacho",
+      "username": "nacho_vintage",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 3,
+      "firebase_uid": "bot_caro",
+      "username": "caro_fashion",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 4,
+      "firebase_uid": "bot_luci",
+      "username": "luci_closet",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 5,
+      "firebase_uid": "bot_fede",
+      "username": "fede_swap",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 6,
+      "firebase_uid": "bot_vale",
+      "username": "vale_outfits",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 7,
+      "firebase_uid": "bot_sofi",
+      "username": "sofi_thrift",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.499Z"
+    },
+    {
+      "id": 8,
+      "firebase_uid": "bot_juli",
+      "username": "juli_y2k",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 9,
+      "firebase_uid": "bot_nico",
+      "username": "nico_street",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 10,
+      "firebase_uid": "bot_pau",
+      "username": "pau_denim",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 11,
+      "firebase_uid": "bot_mati",
+      "username": "mati_baggy",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 12,
+      "firebase_uid": "bot_roma",
+      "username": "roma_vintage",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 13,
+      "firebase_uid": "bot_tomi",
+      "username": "tomi_drops",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 14,
+      "firebase_uid": "bot_flor",
+      "username": "flor_aesthetic",
+      "promo": true,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    },
+    {
+      "id": 15,
+      "firebase_uid": "bot_gonza",
+      "username": "gonza_skate",
+      "promo": false,
+      "created_at": "2026-06-02T14:53:32.500Z"
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "user_id": 10,
+      "image_path": "/uploads/bot_1780412012500_xyoa0.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412012500_xyoa0.jpg"
+      ],
+      "name": "Jean baggy negro tiro alto",
+      "size": "M",
+      "garment_type": "jean",
+      "cut": "Baggy",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#baggy #denim #dark #y2k",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:32.716Z"
+    },
+    {
+      "id": 2,
+      "user_id": 11,
+      "image_path": "/uploads/bot_1780412012716_eonwa.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412012716_eonwa.jpg"
+      ],
+      "name": "Jean baggy azul desgastado",
+      "size": "L",
+      "garment_type": "jean",
+      "cut": "Baggy",
+      "tipo": "ambos",
+      "precio": 7500,
+      "description": "#baggy #denim #vintage #thrifted",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:33.101Z"
+    },
+    {
+      "id": 3,
+      "user_id": 15,
+      "image_path": "/uploads/bot_1780412013101_y6fln.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412013101_y6fln.jpg"
+      ],
+      "name": "Jean baggy cargo con bolsillos",
+      "size": "M",
+      "garment_type": "jean",
+      "cut": "Baggy",
+      "tipo": "venta",
+      "precio": 9000,
+      "description": "#baggy #cargo #streetwear #y2k",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:33.113Z"
+    },
+    {
+      "id": 4,
+      "user_id": 13,
+      "image_path": "/uploads/bot_1780412013114_zhbql.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412013114_zhbql.jpg"
+      ],
+      "name": "Baggy jeans gris lavado",
+      "size": "XL",
+      "garment_type": "jean",
+      "cut": "Baggy",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#baggy #denim #oversized #grunge",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:33.127Z"
+    },
+    {
+      "id": 5,
+      "user_id": 1,
+      "image_path": "/uploads/bot_1780412013128_eoik8.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412013128_eoik8.jpg"
+      ],
+      "name": "Jean bootcut azul medio",
+      "size": "S",
+      "garment_type": "jean",
+      "cut": "Bootcut",
+      "tipo": "ambos",
+      "precio": 8500,
+      "description": "#bootcut #denim #retro #y2k",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:33.568Z"
+    },
+    {
+      "id": 6,
+      "user_id": 14,
+      "image_path": "/uploads/bot_1780412013569_ag4pr.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412013569_ag4pr.jpg"
+      ],
+      "name": "Jean bootcut negro stretch",
+      "size": "M",
+      "garment_type": "jean",
+      "cut": "Bootcut",
+      "tipo": "venta",
+      "precio": 10000,
+      "description": "#bootcut #denim #dark #formal",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:34.246Z"
+    },
+    {
+      "id": 7,
+      "user_id": 3,
+      "image_path": "/uploads/bot_1780412014247_i0sup.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412014247_i0sup.jpg"
+      ],
+      "name": "Bootcut flare destroyed",
+      "size": "S",
+      "garment_type": "jean",
+      "cut": "Bootcut",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#bootcut #flared #y2k #vintage #denim",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:34.259Z"
+    },
+    {
+      "id": 8,
+      "user_id": 12,
+      "image_path": "/uploads/bot_1780412014259_d8thw.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412014259_d8thw.jpg"
+      ],
+      "name": "Jean wide leg azul oscuro",
+      "size": "M",
+      "garment_type": "jean",
+      "cut": "Wide leg",
+      "tipo": "ambos",
+      "precio": 11000,
+      "description": "#bootcut #denim #retro #boho #y2k",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:34.269Z"
+    },
+    {
+      "id": 9,
+      "user_id": 9,
+      "image_path": "/uploads/bot_1780412014270_lhnkb.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412014270_lhnkb.jpg"
+      ],
+      "name": "Hoodie oversized negra",
+      "size": "XL",
+      "garment_type": "buzo",
+      "cut": "Hoodie",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#streetwear #oversized #dark #casual",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:34.436Z"
+    },
+    {
+      "id": 10,
+      "user_id": 9,
+      "image_path": "/uploads/bot_1780412014436_xwiri.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412014436_xwiri.jpg"
+      ],
+      "name": "Hoodie gráfica collab drop",
+      "size": "L",
+      "garment_type": "buzo",
+      "cut": "Hoodie",
+      "tipo": "venta",
+      "precio": 15000,
+      "description": "#streetwear #dark #aesthetic #oversized",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:35.022Z"
+    },
+    {
+      "id": 11,
+      "user_id": 15,
+      "image_path": "/uploads/bot_1780412015023_gej6f.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412015023_gej6f.jpg"
+      ],
+      "name": "Remera gráfica skate brand",
+      "size": "L",
+      "garment_type": "remera",
+      "cut": "Oversize",
+      "tipo": "ambos",
+      "precio": 6000,
+      "description": "#streetwear #grunge #thrifted #casual",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:35.667Z"
+    },
+    {
+      "id": 12,
+      "user_id": 13,
+      "image_path": "/uploads/bot_1780412015668_kudrg.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412015668_kudrg.jpg"
+      ],
+      "name": "Cargo pants negros 6 bolsillos",
+      "size": "M",
+      "garment_type": "pantalon",
+      "cut": "Cargo",
+      "tipo": "venta",
+      "precio": 12000,
+      "description": "#streetwear #cargo #dark #y2k #baggy",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:35.679Z"
+    },
+    {
+      "id": 13,
+      "user_id": 2,
+      "image_path": "/uploads/bot_1780412015679_sdu4h.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412015679_sdu4h.jpg"
+      ],
+      "name": "Campera de nylon streetwear",
+      "size": "M",
+      "garment_type": "campera",
+      "cut": "Regular",
+      "tipo": "ambos",
+      "precio": 18000,
+      "description": "#streetwear #y2k #retro #aesthetic",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:35.693Z"
+    },
+    {
+      "id": 14,
+      "user_id": 5,
+      "image_path": "/uploads/bot_1780412015694_dqwjv.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412015694_dqwjv.jpg"
+      ],
+      "name": "Buzo crewneck gráfico",
+      "size": "L",
+      "garment_type": "buzo",
+      "cut": "Crewneck",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#streetwear #oversized #aesthetic #casual",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:35.705Z"
+    },
+    {
+      "id": 15,
+      "user_id": 8,
+      "image_path": "/uploads/bot_1780412015705_fyhr4.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412015705_fyhr4.jpg"
+      ],
+      "name": "Top de malla y2k cromado",
+      "size": "XS",
+      "garment_type": "musculosa",
+      "cut": "Crop",
+      "tipo": "ambos",
+      "precio": 5500,
+      "description": "#y2k #aesthetic #coquette #colorful",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.298Z"
+    },
+    {
+      "id": 16,
+      "user_id": 8,
+      "image_path": "/uploads/bot_1780412016299_qivow.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016299_qivow.jpg"
+      ],
+      "name": "Jean low rise y2k flare",
+      "size": "S",
+      "garment_type": "jean",
+      "cut": "Flared",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#y2k #retro #flared #denim #vintage",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.468Z"
+    },
+    {
+      "id": 17,
+      "user_id": 14,
+      "image_path": "/uploads/bot_1780412016469_7ifxb.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016469_7ifxb.jpg"
+      ],
+      "name": "Crop top mariposa y2k",
+      "size": "XS",
+      "garment_type": "remera",
+      "cut": "Crop",
+      "tipo": "venta",
+      "precio": 4000,
+      "description": "#y2k #colorful #coquette #aesthetic",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.480Z"
+    },
+    {
+      "id": 18,
+      "user_id": 6,
+      "image_path": "/uploads/bot_1780412016480_sbyej.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016480_sbyej.jpg"
+      ],
+      "name": "Campera anorak y2k colores",
+      "size": "S",
+      "garment_type": "campera",
+      "cut": "Regular",
+      "tipo": "ambos",
+      "precio": 14000,
+      "description": "#y2k #colorful #streetwear #retro",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.491Z"
+    },
+    {
+      "id": 19,
+      "user_id": 12,
+      "image_path": "/uploads/bot_1780412016492_z9e33.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016492_z9e33.jpg"
+      ],
+      "name": "Vestido mini y2k plateado",
+      "size": "S",
+      "garment_type": "vestido",
+      "cut": "Mini",
+      "tipo": "venta",
+      "precio": 9500,
+      "description": "#y2k #aesthetic #dark #coquette",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.503Z"
+    },
+    {
+      "id": 20,
+      "user_id": 1,
+      "image_path": "/uploads/bot_1780412016504_8g0xt.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016504_8g0xt.jpg"
+      ],
+      "name": "Remera crop blanca básica",
+      "size": "S",
+      "garment_type": "remera",
+      "cut": "Crop",
+      "tipo": "ambos",
+      "precio": 3500,
+      "description": "#minimalist #crop #aesthetic #casual",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.514Z"
+    },
+    {
+      "id": 21,
+      "user_id": 3,
+      "image_path": "/uploads/bot_1780412016515_iz6ma.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016515_iz6ma.jpg"
+      ],
+      "name": "Remera oversized vintage wash",
+      "size": "M",
+      "garment_type": "remera",
+      "cut": "Oversize",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#vintage #oversized #thrifted #grunge",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.525Z"
+    },
+    {
+      "id": 22,
+      "user_id": 4,
+      "image_path": "/uploads/bot_1780412016526_wy3je.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016526_wy3je.jpg"
+      ],
+      "name": "Musculosa satén beige",
+      "size": "S",
+      "garment_type": "musculosa",
+      "cut": "Regular",
+      "tipo": "ambos",
+      "precio": 4500,
+      "description": "#coquette #minimalist #aesthetic #formal",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.696Z"
+    },
+    {
+      "id": 23,
+      "user_id": 2,
+      "image_path": "/uploads/bot_1780412016697_vqdwd.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016697_vqdwd.jpg"
+      ],
+      "name": "Bomber plateada oversize",
+      "size": "L",
+      "garment_type": "campera",
+      "cut": "Bomber",
+      "tipo": "venta",
+      "precio": 22000,
+      "description": "#y2k #streetwear #aesthetic #retro",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.710Z"
+    },
+    {
+      "id": 24,
+      "user_id": 7,
+      "image_path": "/uploads/bot_1780412016711_fu26r.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016711_fu26r.jpg"
+      ],
+      "name": "Campera de jean oversized",
+      "size": "M",
+      "garment_type": "campera",
+      "cut": "Denim",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#denim #vintage #thrifted #casual #baggy",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.722Z"
+    },
+    {
+      "id": 25,
+      "user_id": 11,
+      "image_path": "/uploads/bot_1780412016722_kfo3q.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016722_kfo3q.jpg"
+      ],
+      "name": "Puffer negro corto",
+      "size": "M",
+      "garment_type": "campera",
+      "cut": "Puffer",
+      "tipo": "ambos",
+      "precio": 19000,
+      "description": "#streetwear #dark #casual #oversized",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.733Z"
+    },
+    {
+      "id": 26,
+      "user_id": 12,
+      "image_path": "/uploads/bot_1780412016733_qyh38.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016733_qyh38.jpg"
+      ],
+      "name": "Trench coat beige clásico",
+      "size": "S",
+      "garment_type": "abrigo",
+      "cut": "Trench",
+      "tipo": "venta",
+      "precio": 28000,
+      "description": "#formal #minimalist #aesthetic #preppy",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.900Z"
+    },
+    {
+      "id": 27,
+      "user_id": 14,
+      "image_path": "/uploads/bot_1780412016901_iyqq4.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016901_iyqq4.jpg"
+      ],
+      "name": "Vestido midi floral boho",
+      "size": "S",
+      "garment_type": "vestido",
+      "cut": "Midi",
+      "tipo": "ambos",
+      "precio": 13000,
+      "description": "#boho #cottagecore #floral #aesthetic",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.913Z"
+    },
+    {
+      "id": 28,
+      "user_id": 8,
+      "image_path": "/uploads/bot_1780412016914_aktfq.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016914_aktfq.jpg"
+      ],
+      "name": "Falda plisada rosa pastel",
+      "size": "XS",
+      "garment_type": "falda",
+      "cut": "Plisada",
+      "tipo": "venta",
+      "precio": 8000,
+      "description": "#coquette #aesthetic #y2k #colorful",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:36.925Z"
+    },
+    {
+      "id": 29,
+      "user_id": 6,
+      "image_path": "/uploads/bot_1780412016926_0ub6v.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412016926_0ub6v.jpg"
+      ],
+      "name": "Mini falda cuero negra",
+      "size": "S",
+      "garment_type": "falda",
+      "cut": "Mini",
+      "tipo": "intercambio",
+      "precio": null,
+      "description": "#dark #grunge #streetwear #y2k",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:37.095Z"
+    },
+    {
+      "id": 30,
+      "user_id": 4,
+      "image_path": "/uploads/bot_1780412017095_2e658.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412017095_2e658.jpg"
+      ],
+      "name": "Blazer oversize verde",
+      "size": "M",
+      "garment_type": "blazer",
+      "cut": "Oversize",
+      "tipo": "venta",
+      "precio": 16000,
+      "description": "#formal #aesthetic #preppy #minimalist",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:37.107Z"
+    },
+    {
+      "id": 31,
+      "user_id": 7,
+      "image_path": "/uploads/bot_1780412017107_wlb1n.jpg",
+      "image_paths": [
+        "/uploads/bot_1780412017107_wlb1n.jpg"
+      ],
+      "name": "Blazer negro slim fit",
+      "size": "S",
+      "garment_type": "blazer",
+      "cut": "Slim",
+      "tipo": "ambos",
+      "precio": 14000,
+      "description": "#formal #dark #minimalist #preppy",
+      "measurements": "{}",
+      "created_at": "2026-06-02T14:53:37.116Z"
+    }
+  ],
+  "swipes": [
+    {
+      "id": 1,
+      "user_id": 9,
+      "item_id": 1,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 2,
+      "user_id": 9,
+      "item_id": 5,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 3,
+      "user_id": 9,
+      "item_id": 20,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 4,
+      "user_id": 8,
+      "item_id": 6,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 5,
+      "user_id": 8,
+      "item_id": 17,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 6,
+      "user_id": 8,
+      "item_id": 27,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 7,
+      "user_id": 8,
+      "item_id": 18,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 8,
+      "user_id": 8,
+      "item_id": 29,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 9,
+      "user_id": 11,
+      "item_id": 3,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 10,
+      "user_id": 11,
+      "item_id": 11,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 11,
+      "user_id": 11,
+      "item_id": 4,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 12,
+      "user_id": 11,
+      "item_id": 12,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 13,
+      "user_id": 15,
+      "item_id": 9,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 14,
+      "user_id": 15,
+      "item_id": 10,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 15,
+      "user_id": 15,
+      "item_id": 2,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 16,
+      "user_id": 15,
+      "item_id": 25,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 17,
+      "user_id": 14,
+      "item_id": 15,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 18,
+      "user_id": 14,
+      "item_id": 16,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 19,
+      "user_id": 14,
+      "item_id": 28,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 20,
+      "user_id": 6,
+      "item_id": 8,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 21,
+      "user_id": 6,
+      "item_id": 19,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 22,
+      "user_id": 6,
+      "item_id": 26,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 23,
+      "user_id": 3,
+      "item_id": 22,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 24,
+      "user_id": 3,
+      "item_id": 30,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 25,
+      "user_id": 4,
+      "item_id": 7,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 26,
+      "user_id": 4,
+      "item_id": 21,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 27,
+      "user_id": 1,
+      "item_id": 24,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 28,
+      "user_id": 1,
+      "item_id": 31,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 29,
+      "user_id": 7,
+      "item_id": 13,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 30,
+      "user_id": 7,
+      "item_id": 23,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 31,
+      "user_id": 2,
+      "item_id": 14,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 32,
+      "user_id": 5,
+      "item_id": 5,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 33,
+      "user_id": 5,
+      "item_id": 20,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 34,
+      "user_id": 13,
+      "item_id": 9,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 35,
+      "user_id": 13,
+      "item_id": 10,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 36,
+      "user_id": 12,
+      "item_id": 1,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 37,
+      "user_id": 10,
+      "item_id": 2,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    },
+    {
+      "id": 38,
+      "user_id": 10,
+      "item_id": 25,
+      "liked": 1,
+      "created_at": "2026-06-02T14:53:37.118Z"
+    }
+  ],
   "matches": [],
-  "messages": [],
-  "ratings": [],
+  "messages": [
+    {
+      "id": 1,
+      "sender_id": 9,
+      "receiver_id": 10,
+      "text": "Buenas! vi que tenés los jeans baggy, siguen disponibles?",
+      "created_at": "2026-06-02T14:33:37.119Z"
+    },
+    {
+      "id": 2,
+      "sender_id": 10,
+      "receiver_id": 9,
+      "text": "Si! están en perfecto estado, los usé como 3 veces",
+      "created_at": "2026-06-02T14:35:37.119Z"
+    },
+    {
+      "id": 3,
+      "sender_id": 9,
+      "receiver_id": 10,
+      "text": "Copado, estarías para un intercambio? tengo una hoodie talle L",
+      "created_at": "2026-06-02T14:38:37.119Z"
+    },
+    {
+      "id": 4,
+      "sender_id": 10,
+      "receiver_id": 9,
+      "text": "Me interesa! mandame foto",
+      "created_at": "2026-06-02T14:40:37.119Z"
+    },
+    {
+      "id": 5,
+      "sender_id": 9,
+      "receiver_id": 10,
+      "text": "Te mando por acá, son los que tengo publicados",
+      "created_at": "2026-06-02T14:42:37.119Z"
+    },
+    {
+      "id": 6,
+      "sender_id": 14,
+      "receiver_id": 8,
+      "text": "Holaa! me encantó el top y2k",
+      "created_at": "2026-06-02T14:25:37.119Z"
+    },
+    {
+      "id": 7,
+      "sender_id": 8,
+      "receiver_id": 14,
+      "text": "Aww gracias! lo conseguí en un thrift",
+      "created_at": "2026-06-02T14:29:37.119Z"
+    },
+    {
+      "id": 8,
+      "sender_id": 14,
+      "receiver_id": 8,
+      "text": "Qué talle es? en las fotos no se ve bien",
+      "created_at": "2026-06-02T14:32:37.119Z"
+    },
+    {
+      "id": 9,
+      "sender_id": 8,
+      "receiver_id": 14,
+      "text": "XS, yo uso 34/36 y me queda perfecto",
+      "created_at": "2026-06-02T14:35:37.119Z"
+    },
+    {
+      "id": 10,
+      "sender_id": 14,
+      "receiver_id": 8,
+      "text": "Perfecto eso uso yo! estarías para venderlo?",
+      "created_at": "2026-06-02T14:37:37.119Z"
+    },
+    {
+      "id": 11,
+      "sender_id": 8,
+      "receiver_id": 14,
+      "text": "Prefiero intercambio, vi tu crop top que está hermoso",
+      "created_at": "2026-06-02T14:39:37.119Z"
+    },
+    {
+      "id": 12,
+      "sender_id": 14,
+      "receiver_id": 8,
+      "text": "Dale! coordinamos?",
+      "created_at": "2026-06-02T14:43:37.119Z"
+    },
+    {
+      "id": 13,
+      "sender_id": 15,
+      "receiver_id": 11,
+      "text": "Eyyy vi el puffer negro, cuánto pedís?",
+      "created_at": "2026-06-02T14:29:37.119Z"
+    },
+    {
+      "id": 14,
+      "sender_id": 11,
+      "receiver_id": 15,
+      "text": "19000, pero si tenés algo para intercambiar también escucho",
+      "created_at": "2026-06-02T14:32:37.119Z"
+    },
+    {
+      "id": 15,
+      "sender_id": 15,
+      "receiver_id": 11,
+      "text": "Tengo unos cargo pants, los viste?",
+      "created_at": "2026-06-02T14:35:37.119Z"
+    },
+    {
+      "id": 16,
+      "sender_id": 11,
+      "receiver_id": 15,
+      "text": "Si los vi! qué talle son?",
+      "created_at": "2026-06-02T14:37:37.119Z"
+    },
+    {
+      "id": 17,
+      "sender_id": 15,
+      "receiver_id": 11,
+      "text": "M, como el puffer",
+      "created_at": "2026-06-02T14:41:37.119Z"
+    },
+    {
+      "id": 18,
+      "sender_id": 11,
+      "receiver_id": 15,
+      "text": "Perfecto, me tienta el intercambio",
+      "created_at": "2026-06-02T14:43:37.119Z"
+    },
+    {
+      "id": 19,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "text": "Hola! el blazer oversize, de qué color es exactamente?",
+      "created_at": "2026-06-02T14:29:37.119Z"
+    },
+    {
+      "id": 20,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "text": "Es un verde oliva, muy lindo con jeans",
+      "created_at": "2026-06-02T14:33:37.119Z"
+    },
+    {
+      "id": 21,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "text": "Ay me encanta esa combinación. Qué talle?",
+      "created_at": "2026-06-02T14:35:37.119Z"
+    },
+    {
+      "id": 22,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "text": "M pero oversize, a mí que uso S me quedaba bien",
+      "created_at": "2026-06-02T14:38:37.119Z"
+    },
+    {
+      "id": 23,
+      "sender_id": 4,
+      "receiver_id": 3,
+      "text": "Yo uso M/L, capaz me queda grande. Puedo pagarlo?",
+      "created_at": "2026-06-02T14:42:37.119Z"
+    },
+    {
+      "id": 24,
+      "sender_id": 3,
+      "receiver_id": 4,
+      "text": "16000, negociable!",
+      "created_at": "2026-06-02T14:45:37.119Z"
+    },
+    {
+      "id": 25,
+      "sender_id": 1,
+      "receiver_id": 7,
+      "text": "Buenas! vi el blazer negro, está impecable?",
+      "created_at": "2026-06-02T14:37:37.119Z"
+    },
+    {
+      "id": 26,
+      "sender_id": 7,
+      "receiver_id": 1,
+      "text": "Sí! lo usé dos veces, como nuevo",
+      "created_at": "2026-06-02T14:41:37.119Z"
+    },
+    {
+      "id": 27,
+      "sender_id": 1,
+      "receiver_id": 7,
+      "text": "Perfecto, estarías para intercambio por la remera crop?",
+      "created_at": "2026-06-02T14:43:37.119Z"
+    },
+    {
+      "id": 28,
+      "sender_id": 7,
+      "receiver_id": 1,
+      "text": "La vi y me gustó! coordinamos el intercambio",
+      "created_at": "2026-06-02T14:45:37.119Z"
+    }
+  ],
+  "ratings": [
+    {
+      "id": 1,
+      "rater_id": 2,
+      "rated_id": 1,
+      "stars": 5,
+      "comment": "Super confiable 👌",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 2,
+      "rater_id": 3,
+      "rated_id": 1,
+      "stars": 4,
+      "comment": "Muy buena prenda",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 3,
+      "rater_id": 1,
+      "rated_id": 2,
+      "stars": 5,
+      "comment": "Excelente vendedor",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 4,
+      "rater_id": 4,
+      "rated_id": 3,
+      "stars": 3,
+      "comment": "Tardó en responder",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 5,
+      "rater_id": 6,
+      "rated_id": 4,
+      "stars": 5,
+      "comment": "¡Todo impecable!",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 6,
+      "rater_id": 5,
+      "rated_id": 6,
+      "stars": 4,
+      "comment": "Muy buena",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 7,
+      "rater_id": 7,
+      "rated_id": 5,
+      "stars": 5,
+      "comment": "Perfecto intercambio",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 8,
+      "rater_id": 8,
+      "rated_id": 9,
+      "stars": 5,
+      "comment": "Re copado, buena ropa",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 9,
+      "rater_id": 9,
+      "rated_id": 10,
+      "stars": 4,
+      "comment": "Jeans como dijeron",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 10,
+      "rater_id": 10,
+      "rated_id": 11,
+      "stars": 5,
+      "comment": "Rápido y honesto",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 11,
+      "rater_id": 12,
+      "rated_id": 13,
+      "stars": 3,
+      "comment": "Bien, podría ser más detallista",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 12,
+      "rater_id": 15,
+      "rated_id": 14,
+      "stars": 5,
+      "comment": "Increíble ropa, recomiendo",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    },
+    {
+      "id": 13,
+      "rater_id": 14,
+      "rated_id": 15,
+      "stars": 4,
+      "comment": "Todo ok",
+      "created_at": "2026-06-02T14:53:37.117Z"
+    }
+  ],
   "feedback": []
 }
