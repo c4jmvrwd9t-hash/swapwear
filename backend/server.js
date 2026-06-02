@@ -3,7 +3,6 @@ const multer = require('multer');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -78,12 +77,19 @@ const upload = multer({
 });
 
 // ── Email transporter (Gmail SMTP via env vars) ───────────────────────────────
-const mailer = process.env.GMAIL_USER && process.env.GMAIL_PASS
-  ? nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS },
-    })
-  : null;
+async function sendEmail({ to, subject, html }) {
+  if (!process.env.RESEND_API_KEY) return;
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ from: 'SwapWear <onboarding@resend.dev>', to, subject, html }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Resend error');
+}
 
 app.use(cors());
 app.use(express.json());
@@ -446,8 +452,7 @@ app.post('/api/feedback', (req, res) => {
   });
   writeDb(db);
 
-  console.log('Feedback recibido. Mailer:', mailer ? 'configurado' : 'NO configurado', '| GMAIL_USER:', process.env.GMAIL_USER || 'NO SET');
-  if (mailer) {
+  if (process.env.RESEND_API_KEY) {
     const accountType = db.users.find(u => u.id === parseInt(user_id))?.account_type;
     const accountLabel = accountType === 'store' ? '🏪 Tienda Vintage' : accountType === 'person' ? '👤 Persona' : '—';
     const html = `
@@ -462,8 +467,7 @@ app.post('/api/feedback', (req, res) => {
         </table>
       </div>`;
 
-    mailer.sendMail({
-      from: `"SwapWear Feedback" <${process.env.GMAIL_USER}>`,
+    sendEmail({
       to: 'n8nautomatizacionesnacho@gmail.com',
       subject: `[SwapWear] ${tipo} de ${username || 'Anónimo'}`,
       html,
