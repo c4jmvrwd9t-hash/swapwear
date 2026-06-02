@@ -486,6 +486,27 @@ body {
   border-radius: var(--radius-xs);
   border-left: 3px solid var(--red);
 }
+.form-success {
+  color: #16a34a;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  background: #f0fdf4;
+  border-radius: var(--radius-xs);
+  border-left: 3px solid #16a34a;
+}
+.forgot-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: right;
+  width: 100%;
+  padding: 0.25rem 0;
+  text-decoration: underline;
+}
+.forgot-btn:hover { color: var(--text); }
 
 /* ===== BUTTONS ===== */
 .btn-primary {

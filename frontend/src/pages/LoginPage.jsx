@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase.js';
 
 const PROMO_END = new Date('2026-05-11T23:59:59-03:00');
@@ -48,6 +48,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetSent, setResetSent] = useState(false);
   const timeLeft = useCountdown();
   const promoActive = timeLeft > 0;
   const { d, h, m, s } = fmt(timeLeft);
@@ -66,6 +67,20 @@ export default function LoginPage() {
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user') handleError(err);
       else setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) { setError('Escribí tu email para recuperar la contraseña.'); return; }
+    setLoading(true);
+    setError('');
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetSent(true);
+    } catch (err) {
+      setError(FIREBASE_ERRORS[err.code] || 'No se pudo enviar el email. Verificá que el email sea correcto.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -191,7 +206,16 @@ export default function LoginPage() {
               />
             </div>
 
+            {mode === 'login' && (
+              <button type="button" className="forgot-btn" onClick={handleForgotPassword} disabled={loading}>
+                ¿Olvidaste tu contraseña?
+              </button>
+            )}
+
             {error && <p className="form-error">{error}</p>}
+            {resetSent && (
+              <p className="form-success">Te enviamos un email para recuperar tu contraseña.</p>
+            )}
 
             <button
               type="submit"
