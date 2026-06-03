@@ -1545,8 +1545,15 @@ body {
   grid-row: 1 / 3;
 }
 
-.match-info { display: flex; flex-direction: column; gap: 0.2rem; }
-.match-name { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+.match-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+.match-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
 .match-item-label { font-size: 0.78rem; color: var(--muted); }
 .match-last-msg {
   font-size: 0.82rem;
@@ -1554,7 +1561,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 180px;
+  max-width: 160px;
 }
 
 .match-thumb {
