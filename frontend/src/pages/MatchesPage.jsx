@@ -202,26 +202,20 @@ export default function MatchesPage({ user }) {
               <div className="match-avatar">{match.user.username[0].toUpperCase()}</div>
               <div className="match-info">
                 <p className="match-name">@{match.user.username}</p>
-                <Stars avg={match.user.rating?.avg} count={match.user.rating?.count} />
-                <p className="match-item-label">Le gustó: <strong>{match.liked_item.name || 'tu prenda'}</strong></p>
+                {match.last_message ? (
+                  <p className="match-last-msg">
+                    {match.last_message.mine ? 'Vos: ' : ''}{match.last_message.text}
+                  </p>
+                ) : (
+                  <p className="match-item-label">Le gustó: <strong>{match.liked_item.name || 'tu prenda'}</strong></p>
+                )}
               </div>
               <img src={match.liked_item.image_path} alt="" className="match-thumb" />
 
-              {ratingId === match.user.id ? (
-                <div className="match-rate-expand">
-                  <RateForm
-                    me={user}
-                    target={match.user}
-                    onDone={() => setRatingId(null)}
-                  />
-                </div>
-              ) : (
-                <div className="match-btns">
-                  <button className="match-btn match-btn-outline" onClick={() => openProfile(match)}>Ver prendas</button>
-                  <button className="match-btn match-btn-outline" onClick={() => setRatingId(match.user.id)}>★ Calificar</button>
-                  <button className="match-btn match-btn-primary" onClick={() => openChat(match)}>Chatear</button>
-                </div>
-              )}
+              <div className="match-btns">
+                <button className="match-btn match-btn-outline" onClick={() => openProfile(match)}>Ver prendas</button>
+                <button className="match-btn match-btn-primary" onClick={() => openChat(match)}>Chatear</button>
+              </div>
             </div>
           ))}
         </div>

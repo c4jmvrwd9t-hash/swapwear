@@ -381,10 +381,18 @@ app.get('/api/matches', (req, res) => {
     seen.add(s.user_id);
     const liker = db.users.find(u => u.id === s.user_id);
     const item  = db.items.find(i => i.id === s.item_id);
-    if (liker && item) result.push({
-      user: { id: liker.id, username: liker.username, rating: getUserRating(db, liker.id) },
-      liked_item: item,
-    });
+    if (liker && item) {
+      const msgs = (db.messages || []).filter(m =>
+        (m.sender_id === uid && m.receiver_id === liker.id) ||
+        (m.sender_id === liker.id && m.receiver_id === uid)
+      );
+      const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+      result.push({
+        user: { id: liker.id, username: liker.username, rating: getUserRating(db, liker.id) },
+        liked_item: item,
+        last_message: lastMsg ? { text: lastMsg.text, mine: lastMsg.sender_id === uid } : null,
+      });
+    }
   }
 
   res.json(result);
