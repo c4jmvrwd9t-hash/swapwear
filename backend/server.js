@@ -435,6 +435,21 @@ app.post('/api/messages', (req, res) => {
   res.json(msg);
 });
 
+app.delete('/api/conversation', (req, res) => {
+  const { user_id, other_id } = req.body;
+  if (!user_id || !other_id) return res.status(400).json({ error: 'Faltan datos' });
+  const a = parseInt(user_id), b = parseInt(other_id);
+  const db = readDb();
+  db.messages = (db.messages || []).filter(m =>
+    !((m.sender_id === a && m.receiver_id === b) || (m.sender_id === b && m.receiver_id === a))
+  );
+  db.swipes = (db.swipes || []).filter(s =>
+    !((s.liker_id === a && s.owner_id === b) || (s.liker_id === b && s.owner_id === a))
+  );
+  writeDb(db);
+  res.json({ success: true });
+});
+
 // Send user feedback via email + store in DB
 app.post('/api/feedback', (req, res) => {
   const { user_id, username, tipo, mensaje } = req.body;

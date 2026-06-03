@@ -146,6 +146,15 @@ export default function MatchesPage({ user }) {
   const openChat    = (match) => { setSelected(match); setView('chat'); };
   const openProfile = (match) => { setSelected(match); setView('profile'); };
 
+  const deleteChat = async (match) => {
+    await fetch('/api/conversation', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: user.id, other_id: match.user.id }),
+    });
+    setMatches(prev => prev.filter(m => m.user.id !== match.user.id));
+  };
+
   if (view === 'chat' && selected) {
     return <ChatView me={user} other={selected.user} onBack={() => setView('list')} />;
   }
@@ -189,6 +198,7 @@ export default function MatchesPage({ user }) {
         <div className="matches-list">
           {matches.map(match => (
             <div key={match.user.id} className="match-card">
+              <button className="match-delete-btn" onClick={() => deleteChat(match)} title="Eliminar chat">✕</button>
               <div className="match-avatar">{match.user.username[0].toUpperCase()}</div>
               <div className="match-info">
                 <p className="match-name">@{match.user.username}</p>

@@ -1509,7 +1509,29 @@ body {
   row-gap: 0.6rem;
   align-items: center;
   transition: box-shadow 0.2s;
+  position: relative;
 }
+.match-delete-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--muted);
+  color: white;
+  border: none;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 2;
+}
+.match-card:hover .match-delete-btn { opacity: 1; }
+.match-delete-btn:hover { background: var(--red); }
 .match-card:hover { box-shadow: var(--shadow); }
 
 .match-avatar {
@@ -1631,11 +1653,11 @@ body {
 }
 
 .chat-bubble {
-  max-width: 78%;
-  padding: 0.6rem 0.9rem;
+  max-width: 90%;
+  padding: 0.75rem 1.1rem;
   border-radius: 18px;
-  font-size: 0.92rem;
-  line-height: 1.4;
+  font-size: 1.05rem;
+  line-height: 1.5;
   word-break: break-word;
 }
 .chat-bubble.mine {
