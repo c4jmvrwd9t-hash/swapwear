@@ -285,15 +285,19 @@ app.get('/api/likes', (req, res) => {
   for (const [ownerId, { items }] of ownerMap) {
     const owner = db.users.find(u => u.id === ownerId);
     if (!owner) continue;
+    const readTimes = req.query.read_times ? JSON.parse(req.query.read_times) : {};
+    const since = readTimes[ownerId] ? new Date(readTimes[ownerId]) : new Date(0);
     const msgs = (db.messages || []).filter(m =>
       (m.sender_id === uid && m.receiver_id === ownerId) ||
       (m.sender_id === ownerId && m.receiver_id === uid)
     );
     const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+    const unread = msgs.filter(m => m.sender_id === ownerId && m.receiver_id === uid && new Date(m.created_at) > since).length;
     result.push({
       user: { id: owner.id, username: owner.username, avatar: owner.avatar || null },
       liked_item: items[0],
       last_message: lastMsg ? { text: lastMsg.text, mine: lastMsg.sender_id === uid, created_at: lastMsg.created_at } : null,
+      unread,
     });
   }
 
@@ -426,15 +430,19 @@ app.get('/api/matches', (req, res) => {
     const liker = db.users.find(u => u.id === s.user_id);
     const item  = db.items.find(i => i.id === s.item_id);
     if (liker && item) {
+      const readTimes = req.query.read_times ? JSON.parse(req.query.read_times) : {};
+      const since = readTimes[liker.id] ? new Date(readTimes[liker.id]) : new Date(0);
       const msgs = (db.messages || []).filter(m =>
         (m.sender_id === uid && m.receiver_id === liker.id) ||
         (m.sender_id === liker.id && m.receiver_id === uid)
       );
       const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+      const unread = msgs.filter(m => m.sender_id === liker.id && m.receiver_id === uid && new Date(m.created_at) > since).length;
       result.push({
         user: { id: liker.id, username: liker.username, rating: getUserRating(db, liker.id) },
         liked_item: item,
         last_message: lastMsg ? { text: lastMsg.text, mine: lastMsg.sender_id === uid } : null,
+        unread,
       });
     }
   }

@@ -6,17 +6,36 @@ export default function LikesPage({ user }) {
   const [loading, setLoading] = useState(true);
   const [chatTarget, setChatTarget] = useState(null);
 
-  const load = () =>
-    fetch(`/api/likes?user_id=${user.id}`)
+  const getReadTimes = () => {
+    try { return JSON.parse(localStorage.getItem(`sw_read_${user.id}`) || '{}'); } catch { return {}; }
+  };
+  const markRead = (otherId) => {
+    const rt = getReadTimes();
+    rt[otherId] = new Date().toISOString();
+    localStorage.setItem(`sw_read_${user.id}`, JSON.stringify(rt));
+  };
+
+  const load = () => {
+    const rt = encodeURIComponent(JSON.stringify(getReadTimes()));
+    fetch(`/api/likes?user_id=${user.id}&read_times=${rt}`)
       .then(r => r.json())
       .then(data => { setConvos(data); setLoading(false); });
+  };
 
   useEffect(() => { load(); }, [user.id]);
 
   const openChat = (convo) => {
-    const KEY = `sw_notif_seen_saved_${user.id}`;
-    localStorage.setItem(KEY, new Date().toISOString());
+    markRead(convo.user.id);
     setChatTarget(convo.user);
+  };
+
+  const deleteChat = async (convo) => {
+    await fetch('/api/conversation', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: user.id, other_id: convo.user.id }),
+    });
+    setConvos(prev => prev.filter(c => c.user.id !== convo.user.id));
   };
 
   if (chatTarget) {
@@ -52,11 +71,13 @@ export default function LikesPage({ user }) {
         <div className="matches-list">
           {convos.map(convo => (
             <div key={convo.user.id} className="match-card" onClick={() => openChat(convo)} style={{ cursor: 'pointer' }}>
-              <div className="match-avatar">
+              <button className="match-delete-btn" onClick={e => { e.stopPropagation(); deleteChat(convo); }} title="Eliminar chat">✕</button>
+              <div className="match-avatar" style={{ position: 'relative' }}>
                 {convo.user.avatar
                   ? <img src={convo.user.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                   : convo.user.username[0].toUpperCase()
                 }
+                {convo.unread > 0 && <span className="chat-unread-badge">{convo.unread}</span>}
               </div>
               <div className="match-info">
                 <p className="match-name">@{convo.user.username}</p>

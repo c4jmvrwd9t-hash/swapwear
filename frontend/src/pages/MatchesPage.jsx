@@ -136,14 +136,25 @@ export default function MatchesPage({ user }) {
   const [selected, setSelected] = useState(null);
   const [ratingId, setRatingId] = useState(null); // user id being rated inline
 
-  useEffect(() => {
-    if (view !== 'list') return;
-    fetch(`/api/matches?user_id=${user.id}`)
+  const getReadTimes = () => {
+    try { return JSON.parse(localStorage.getItem(`sw_read_${user.id}`) || '{}'); } catch { return {}; }
+  };
+  const markRead = (otherId) => {
+    const rt = getReadTimes();
+    rt[otherId] = new Date().toISOString();
+    localStorage.setItem(`sw_read_${user.id}`, JSON.stringify(rt));
+  };
+
+  const load = () => {
+    const rt = encodeURIComponent(JSON.stringify(getReadTimes()));
+    fetch(`/api/matches?user_id=${user.id}&read_times=${rt}`)
       .then(r => r.json())
       .then(data => { setMatches(data); setLoading(false); });
-  }, [user.id, view]);
+  };
 
-  const openChat    = (match) => { setSelected(match); setView('chat'); };
+  useEffect(() => { if (view === 'list') load(); }, [user.id, view]);
+
+  const openChat    = (match) => { markRead(match.user.id); setSelected(match); setView('chat'); };
   const openProfile = (match) => { setSelected(match); setView('profile'); };
 
   const deleteChat = async (match) => {
@@ -199,7 +210,10 @@ export default function MatchesPage({ user }) {
           {matches.map(match => (
             <div key={match.user.id} className="match-card">
               <button className="match-delete-btn" onClick={() => deleteChat(match)} title="Eliminar chat">✕</button>
-              <div className="match-avatar">{match.user.username[0].toUpperCase()}</div>
+              <div className="match-avatar" style={{ position: 'relative' }}>
+                {match.user.username[0].toUpperCase()}
+                {match.unread > 0 && <span className="chat-unread-badge">{match.unread}</span>}
+              </div>
               <div className="match-info">
                 <p className="match-name">@{match.user.username}</p>
                 {match.last_message ? (
