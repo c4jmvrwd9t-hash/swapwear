@@ -274,9 +274,11 @@ app.get('/api/likes', (req, res) => {
   const db = readDb();
   const likedItemIds = new Set(db.swipes.filter(s => s.user_id === uid && s.liked === 1).map(s => s.item_id));
 
+  const hiddenForLikes = new Set((db.hidden_convos || []).filter(h => h.by === uid).map(h => h.other));
   const ownerMap = new Map();
   for (const item of db.items) {
     if (!likedItemIds.has(item.id) || item.user_id === uid) continue;
+    if (hiddenForLikes.has(item.user_id)) continue;
     if (!ownerMap.has(item.user_id)) ownerMap.set(item.user_id, { items: [] });
     ownerMap.get(item.user_id).items.push(item);
   }
@@ -418,6 +420,7 @@ app.get('/api/matches', (req, res) => {
   const db = readDb();
   const myItemIds = new Set(db.items.filter(i => i.user_id === uid).map(i => i.id));
 
+  const hiddenFor = new Set((db.hidden_convos || []).filter(h => h.by === uid).map(h => h.other));
   const seen = new Set();
   const result = [];
   const likes = [...db.swipes].reverse(); // most recent first
@@ -426,6 +429,7 @@ app.get('/api/matches', (req, res) => {
     if (!myItemIds.has(s.item_id)) continue;
     if (s.user_id === uid) continue;
     if (seen.has(s.user_id)) continue;
+    if (hiddenFor.has(s.user_id)) continue;
     seen.add(s.user_id);
     const liker = db.users.find(u => u.id === s.user_id);
     const item  = db.items.find(i => i.id === s.item_id);
@@ -467,10 +471,14 @@ app.get('/api/messages', (req, res) => {
   const db = readDb();
   if (!db.messages) db.messages = [];
   const msgs = db.messages
-    .filter(m =>
-      (m.sender_id === uid && m.receiver_id === otherId) ||
-      (m.sender_id === otherId && m.receiver_id === uid)
-    )
+    .filter(m => {
+      const between = (m.sender_id === uid && m.receiver_id === otherId) ||
+                      (m.sender_id === otherId && m.receiver_id === uid);
+      if (!between) return false;
+      // System messages only visible to receiver
+      if (m.system) return m.receiver_id === uid;
+      return true;
+    })
     .sort((a, b) => a.id - b.id);
   res.json(msgs);
 });
@@ -500,12 +508,34 @@ app.delete('/api/conversation', (req, res) => {
   if (!user_id || !other_id) return res.status(400).json({ error: 'Faltan datos' });
   const a = parseInt(user_id), b = parseInt(other_id);
   const db = readDb();
+  if (!db.hidden_convos) db.hidden_convos = [];
+
+  // Check if there's already a system message from B telling A they deleted
+  const bAlreadyDeleted = (db.hidden_convos || []).some(h => h.by === b && h.other === a);
+
+  // Delete all real messages between them
   db.messages = (db.messages || []).filter(m =>
     !((m.sender_id === a && m.receiver_id === b) || (m.sender_id === b && m.receiver_id === a))
   );
-  db.swipes = (db.swipes || []).filter(s =>
-    !((s.liker_id === a && s.owner_id === b) || (s.liker_id === b && s.owner_id === a))
-  );
+
+  // Hide conversation for A
+  if (!db.hidden_convos.some(h => h.by === a && h.other === b)) {
+    db.hidden_convos.push({ by: a, other: b });
+  }
+
+  if (!bAlreadyDeleted) {
+    // Add system notification for B
+    const username = db.users.find(u => u.id === a)?.username || 'Usuario';
+    db.messages.push({
+      id: db.messages.length === 0 ? 1 : Math.max(...db.messages.map(m => m.id)) + 1,
+      sender_id: a,
+      receiver_id: b,
+      text: `@${username} eliminó esta conversación`,
+      system: true,
+      created_at: new Date().toISOString(),
+    });
+  }
+
   writeDb(db);
   res.json({ success: true });
 });

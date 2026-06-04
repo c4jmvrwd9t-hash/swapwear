@@ -53,9 +53,11 @@ export default function ChatView({ me, other, onBack }) {
           <p className="chat-empty">Sé el primero en escribir 👋</p>
         )}
         {messages.map(m => (
-          <div key={m.id} className={`chat-bubble ${m.sender_id === me.id ? 'mine' : 'theirs'}`}>
-            {m.text}
-          </div>
+          m.system
+            ? <div key={m.id} className="chat-system-msg">{m.text}</div>
+            : <div key={m.id} className={`chat-bubble ${m.sender_id === me.id ? 'mine' : 'theirs'}`}>
+                {m.text}
+              </div>
         ))}
         <div ref={bottomRef} />
       </div>

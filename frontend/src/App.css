@@ -1690,6 +1690,18 @@ body {
   font-size: 0.85rem;
   margin: auto;
 }
+.chat-system-msg {
+  align-self: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.78rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 80%;
+  font-style: italic;
+}
 
 .chat-bubble {
   max-width: 90%;
