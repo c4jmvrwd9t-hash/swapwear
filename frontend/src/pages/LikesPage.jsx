@@ -1,140 +1,76 @@
 import { useState, useEffect } from 'react';
 import ChatView from '../components/ChatView.jsx';
-import { Stars, StarPicker } from '../components/Stars.jsx';
-
-function RateInline({ me, target, onDone }) {
-  const [stars, setStars] = useState(0);
-  const [comment, setComment] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
-
-  useEffect(() => {
-    fetch(`/api/rate?rater_id=${me.id}&rated_id=${target.id}`)
-      .then(r => r.json())
-      .then(existing => { if (existing) { setStars(existing.stars); setComment(existing.comment || ''); } });
-  }, [me.id, target.id]);
-
-  const submit = async () => {
-    if (!stars || loading) return;
-    setLoading(true);
-    await fetch('/api/rate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rater_id: me.id, rated_id: target.id, stars, comment }),
-    });
-    setDone(true);
-    setLoading(false);
-    setTimeout(onDone, 1200);
-  };
-
-  if (done) return <div className="rate-done"><span>¡Calificado! {'★'.repeat(stars)}</span></div>;
-
-  return (
-    <div className="rate-form">
-      <StarPicker value={stars} onChange={setStars} />
-      <input
-        className="input-field rate-comment"
-        placeholder="Comentario opcional..."
-        value={comment}
-        onChange={e => setComment(e.target.value)}
-        maxLength={120}
-      />
-      <div className="rate-actions">
-        <button className="match-btn match-btn-outline" onClick={onDone}>Cancelar</button>
-        <button className="match-btn match-btn-primary" onClick={submit} disabled={!stars || loading}>
-          {loading ? '...' : 'Guardar'}
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export default function LikesPage({ user }) {
-  const [items, setItems] = useState([]);
+  const [convos, setConvos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatTarget, setChatTarget] = useState(null);
-  const [ratingTarget, setRatingTarget] = useState(null); // item.id being rated
 
-  useEffect(() => {
+  const load = () =>
     fetch(`/api/likes?user_id=${user.id}`)
       .then(r => r.json())
-      .then(data => { setItems(data); setLoading(false); });
-  }, [user.id]);
+      .then(data => { setConvos(data); setLoading(false); });
+
+  useEffect(() => { load(); }, [user.id]);
+
+  const openChat = (convo) => {
+    const KEY = `sw_notif_seen_saved_${user.id}`;
+    localStorage.setItem(KEY, new Date().toISOString());
+    setChatTarget(convo.user);
+  };
 
   if (chatTarget) {
-    return <ChatView me={user} other={chatTarget} onBack={() => setChatTarget(null)} />;
+    return <ChatView me={user} other={chatTarget} onBack={() => { setChatTarget(null); load(); }} />;
   }
 
   if (loading) {
     return (
-      <div className="likes-page">
-        <div className="swipe-loading"><div className="spinner" /><p>Cargando guardados...</p></div>
+      <div className="matches-page">
+        <div className="swipe-loading"><div className="spinner" /><p>Cargando...</p></div>
       </div>
     );
   }
 
   return (
-    <div className="likes-page">
+    <div className="matches-page">
       <div className="page-header">
         <h2 className="page-title">Guardados</h2>
-        <p className="page-subtitle">{items.length} {items.length === 1 ? 'prenda' : 'prendas'} que te gustaron</p>
+        <p className="page-subtitle">
+          {convos.length === 0
+            ? 'Todavía no guardaste ninguna prenda'
+            : `${convos.length} ${convos.length === 1 ? 'conversación' : 'conversaciones'}`}
+        </p>
       </div>
 
-      {items.length === 0 ? (
+      {convos.length === 0 ? (
         <div className="empty-state">
           <span>💔</span>
-          <p>Todavía no guardaste ninguna prenda</p>
-          <p className="empty-hint">Deslizá a la derecha para guardar las que te gustan</p>
+          <p>Deslizá a la derecha para guardar prendas</p>
+          <p className="empty-hint">Las podrás ver acá y chatear con sus dueños</p>
         </div>
       ) : (
-        <div className="likes-grid">
-          {items.map(item => (
-            <div key={item.id} className="like-card">
-              <div className="like-img-wrapper">
-                <img src={item.image_path} alt={item.name} className="like-img" />
-                <div className="like-badge">❤️</div>
-                {item.tipo && item.tipo !== 'intercambio' && item.precio && (
-                  <div className="card-price-badge">${item.precio.toLocaleString('es-AR')}</div>
+        <div className="matches-list">
+          {convos.map(convo => (
+            <div key={convo.user.id} className="match-card" onClick={() => openChat(convo)} style={{ cursor: 'pointer' }}>
+              <div className="match-avatar">
+                {convo.user.avatar
+                  ? <img src={convo.user.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                  : convo.user.username[0].toUpperCase()
+                }
+              </div>
+              <div className="match-info">
+                <p className="match-name">@{convo.user.username}</p>
+                {convo.last_message ? (
+                  <p className="match-last-msg">
+                    {convo.last_message.mine ? 'Vos: ' : ''}{convo.last_message.text}
+                  </p>
+                ) : (
+                  <p className="match-item-label">Le gustó: <strong>{convo.liked_item?.name || 'tu prenda'}</strong></p>
                 )}
               </div>
-              <div className="like-info">
-                <h4 className="like-name">{item.name || 'Prenda'}</h4>
-                <p className="like-user">@{item.username}</p>
-                {item.seller_rating && (
-                  <Stars avg={item.seller_rating.avg} count={item.seller_rating.count} />
-                )}
-                {item.size && <span className="item-size">Talle {item.size}</span>}
-                <span className={`tipo-badge tipo-${item.tipo || 'intercambio'}`}>
-                  {item.tipo === 'intercambio' || !item.tipo ? '↔ Intercambio'
-                    : item.tipo === 'venta' ? '$ Venta' : '↔$ Ambos'}
-                </span>
-                {item.description && <p className="like-desc">{item.description}</p>}
-
-                {ratingTarget === item.id ? (
-                  <RateInline
-                    me={user}
-                    target={{ id: item.user_id, username: item.username }}
-                    onDone={() => setRatingTarget(null)}
-                  />
-                ) : (
-                  <div className="like-actions">
-                    <button
-                      className="like-chat-btn"
-                      onClick={() => setChatTarget({ id: item.user_id, username: item.username })}
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="13" height="13">
-                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-                      </svg>
-                      Chatear
-                    </button>
-                    <button
-                      className="like-chat-btn"
-                      onClick={() => setRatingTarget(item.id)}
-                    >
-                      ★ Calificar
-                    </button>
-                  </div>
-                )}
+              <img src={convo.liked_item?.image_path} alt="" className="match-thumb" />
+              <div className="match-btns" onClick={e => e.stopPropagation()}>
+                <button className="match-btn match-btn-primary" onClick={() => openChat(convo)}>Chatear</button>
               </div>
             </div>
           ))}

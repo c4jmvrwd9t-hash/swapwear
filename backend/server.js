@@ -272,17 +272,38 @@ app.get('/api/likes', (req, res) => {
   if (!uid) return res.status(400).json({ error: 'user_id requerido' });
 
   const db = readDb();
-  const likedIds = new Set(db.swipes.filter(s => s.user_id === uid && s.liked === 1).map(s => s.item_id));
+  const likedItemIds = new Set(db.swipes.filter(s => s.user_id === uid && s.liked === 1).map(s => s.item_id));
 
-  const items = db.items
-    .filter(i => likedIds.has(i.id))
-    .map(i => {
-      const u = db.users.find(u => u.id === i.user_id);
-      return { ...i, username: u?.username || '?', seller_rating: getUserRating(db, i.user_id) };
-    })
-    .reverse();
+  const ownerMap = new Map();
+  for (const item of db.items) {
+    if (!likedItemIds.has(item.id) || item.user_id === uid) continue;
+    if (!ownerMap.has(item.user_id)) ownerMap.set(item.user_id, { items: [] });
+    ownerMap.get(item.user_id).items.push(item);
+  }
 
-  res.json(items);
+  const result = [];
+  for (const [ownerId, { items }] of ownerMap) {
+    const owner = db.users.find(u => u.id === ownerId);
+    if (!owner) continue;
+    const msgs = (db.messages || []).filter(m =>
+      (m.sender_id === uid && m.receiver_id === ownerId) ||
+      (m.sender_id === ownerId && m.receiver_id === uid)
+    );
+    const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+    result.push({
+      user: { id: owner.id, username: owner.username, avatar: owner.avatar || null },
+      liked_item: items[0],
+      last_message: lastMsg ? { text: lastMsg.text, mine: lastMsg.sender_id === uid, created_at: lastMsg.created_at } : null,
+    });
+  }
+
+  result.sort((a, b) => {
+    const ta = a.last_message?.created_at || a.liked_item?.created_at || '';
+    const tb = b.last_message?.created_at || b.liked_item?.created_at || '';
+    return tb.localeCompare(ta);
+  });
+
+  res.json(result);
 });
 
 // Update user profile (name, bio, goal, account_type, avatar)
@@ -365,17 +386,25 @@ app.get('/api/rate', (req, res) => {
 // Who liked my items (matches inbox)
 app.get('/api/notifications', (req, res) => {
   const uid = parseInt(req.query.user_id);
-  const since = req.query.since ? new Date(req.query.since) : new Date(0);
+  const sinceMat = req.query.since_matches ? new Date(req.query.since_matches) : new Date(0);
+  const sinceSav = req.query.since_saved   ? new Date(req.query.since_saved)   : new Date(0);
   if (!uid) return res.status(400).json({ error: 'user_id requerido' });
   const db = readDb();
+
   const myItemIds = new Set(db.items.filter(i => i.user_id === uid).map(i => i.id));
   const newMatches = (db.swipes || []).filter(s =>
-    s.liked === 1 && myItemIds.has(s.item_id) && s.user_id !== uid && new Date(s.created_at) > since
+    s.liked === 1 && myItemIds.has(s.item_id) && s.user_id !== uid && new Date(s.created_at) > sinceMat
   ).length;
-  const unreadMessages = (db.messages || []).filter(m =>
-    m.receiver_id === uid && new Date(m.created_at) > since
+
+  const likedOwnerIds = new Set(
+    (db.swipes || []).filter(s => s.user_id === uid && s.liked === 1)
+      .map(s => db.items.find(i => i.id === s.item_id)?.user_id).filter(Boolean)
+  );
+  const unreadSaved = (db.messages || []).filter(m =>
+    m.receiver_id === uid && likedOwnerIds.has(m.sender_id) && new Date(m.created_at) > sinceSav
   ).length;
-  res.json({ new_matches: newMatches, unread_messages: unreadMessages });
+
+  res.json({ new_matches: newMatches, unread_saved: unreadSaved });
 });
 
 app.get('/api/matches', (req, res) => {

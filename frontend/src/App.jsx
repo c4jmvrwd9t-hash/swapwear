@@ -20,7 +20,8 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSub, setShowSub] = useState(false);
   const [showProfileEdit, setShowProfileEdit] = useState(false);
-  const [notifCount, setNotifCount] = useState(0);
+  const [matchNotif, setMatchNotif] = useState(0);
+  const [savedNotif, setSavedNotif] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (fbUser) => {
@@ -51,12 +52,14 @@ export default function App() {
 
   useEffect(() => {
     if (!internalUser) return;
-    const KEY = `sw_notif_seen_${internalUser.id}`;
+    const KEY_M = `sw_notif_seen_${internalUser.id}`;
+    const KEY_S = `sw_notif_seen_saved_${internalUser.id}`;
     const fetchNotifs = () => {
-      const since = localStorage.getItem(KEY) || new Date(0).toISOString();
-      fetch(`/api/notifications?user_id=${internalUser.id}&since=${encodeURIComponent(since)}`)
+      const sinceM = localStorage.getItem(KEY_M) || new Date(0).toISOString();
+      const sinceS = localStorage.getItem(KEY_S) || new Date(0).toISOString();
+      fetch(`/api/notifications?user_id=${internalUser.id}&since_matches=${encodeURIComponent(sinceM)}&since_saved=${encodeURIComponent(sinceS)}`)
         .then(r => r.json())
-        .then(d => setNotifCount((d.new_matches || 0) + (d.unread_messages || 0)))
+        .then(d => { setMatchNotif(d.new_matches || 0); setSavedNotif(d.unread_saved || 0); })
         .catch(() => {});
     };
     fetchNotifs();
@@ -66,8 +69,14 @@ export default function App() {
 
   const goToMatches = () => {
     if (internalUser) localStorage.setItem(`sw_notif_seen_${internalUser.id}`, new Date().toISOString());
-    setNotifCount(0);
+    setMatchNotif(0);
     setTab('matches');
+  };
+
+  const goToSaved = () => {
+    if (internalUser) localStorage.setItem(`sw_notif_seen_saved_${internalUser.id}`, new Date().toISOString());
+    setSavedNotif(0);
+    setTab('likes');
   };
 
   const handleSignOut = () => { setMenuOpen(false); firebaseSignOut(auth); };
@@ -169,15 +178,18 @@ export default function App() {
             <svg viewBox="0 0 24 24" fill={tab === 'matches' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
               <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
             </svg>
-            {notifCount > 0 && <span className="bnav-badge">{notifCount}</span>}
+            {matchNotif > 0 && <span className="bnav-badge">{matchNotif}</span>}
           </span>
           <span>Matches</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'likes' ? 'active' : ''}`} onClick={() => setTab('likes')}>
-          <svg viewBox="0 0 24 24" fill={tab === 'likes' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
-          </svg>
+        <button className={`bnav-btn ${tab === 'likes' ? 'active' : ''}`} onClick={goToSaved}>
+          <span style={{ position: 'relative', display: 'inline-flex' }}>
+            <svg viewBox="0 0 24 24" fill={tab === 'likes' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+            </svg>
+            {savedNotif > 0 && <span className="bnav-badge">{savedNotif}</span>}
+          </span>
           <span>Guardados</span>
         </button>
 
