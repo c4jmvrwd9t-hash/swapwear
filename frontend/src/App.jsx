@@ -20,6 +20,7 @@ export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showSub, setShowSub] = useState(false);
   const [showProfileEdit, setShowProfileEdit] = useState(false);
+  const [notifCount, setNotifCount] = useState(0);
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (fbUser) => {
@@ -47,6 +48,27 @@ export default function App() {
       .then(d => { setInternalUser(d.user); setUserItems(d.items); })
       .finally(() => setSyncing(false));
   }, [firebaseUser]);
+
+  useEffect(() => {
+    if (!internalUser) return;
+    const KEY = `sw_notif_seen_${internalUser.id}`;
+    const fetchNotifs = () => {
+      const since = localStorage.getItem(KEY) || new Date(0).toISOString();
+      fetch(`/api/notifications?user_id=${internalUser.id}&since=${encodeURIComponent(since)}`)
+        .then(r => r.json())
+        .then(d => setNotifCount((d.new_matches || 0) + (d.unread_messages || 0)))
+        .catch(() => {});
+    };
+    fetchNotifs();
+    const id = setInterval(fetchNotifs, 30000);
+    return () => clearInterval(id);
+  }, [internalUser]);
+
+  const goToMatches = () => {
+    if (internalUser) localStorage.setItem(`sw_notif_seen_${internalUser.id}`, new Date().toISOString());
+    setNotifCount(0);
+    setTab('matches');
+  };
 
   const handleSignOut = () => { setMenuOpen(false); firebaseSignOut(auth); };
 
@@ -142,10 +164,13 @@ export default function App() {
           <span>Explorar</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'matches' ? 'active' : ''}`} onClick={() => setTab('matches')}>
-          <svg viewBox="0 0 24 24" fill={tab === 'matches' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-          </svg>
+        <button className={`bnav-btn ${tab === 'matches' ? 'active' : ''}`} onClick={goToMatches}>
+          <span style={{ position: 'relative', display: 'inline-flex' }}>
+            <svg viewBox="0 0 24 24" fill={tab === 'matches' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            </svg>
+            {notifCount > 0 && <span className="bnav-badge">{notifCount}</span>}
+          </span>
           <span>Matches</span>
         </button>
 
@@ -157,15 +182,10 @@ export default function App() {
         </button>
 
         <button className={`bnav-btn ${tab === 'upload' ? 'active' : ''}`} onClick={() => setTab('upload')}>
-          <span className="bnav-badge-wrap" style={{ position: 'relative', display: 'inline-flex' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="18" height="18" rx="3"/>
-              <path d="M12 8v8M8 12l4-4 4 4"/>
-            </svg>
-            {userItems.length > 0 && (
-              <span className="bnav-badge">{userItems.length}</span>
-            )}
-          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <path d="M12 8v8M8 12l4-4 4 4"/>
+          </svg>
           <span>Mis Prendas</span>
         </button>
 

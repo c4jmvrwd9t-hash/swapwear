@@ -363,6 +363,21 @@ app.get('/api/rate', (req, res) => {
 });
 
 // Who liked my items (matches inbox)
+app.get('/api/notifications', (req, res) => {
+  const uid = parseInt(req.query.user_id);
+  const since = req.query.since ? new Date(req.query.since) : new Date(0);
+  if (!uid) return res.status(400).json({ error: 'user_id requerido' });
+  const db = readDb();
+  const myItemIds = new Set(db.items.filter(i => i.user_id === uid).map(i => i.id));
+  const newMatches = (db.swipes || []).filter(s =>
+    s.liked === 1 && myItemIds.has(s.item_id) && s.user_id !== uid && new Date(s.created_at) > since
+  ).length;
+  const unreadMessages = (db.messages || []).filter(m =>
+    m.receiver_id === uid && new Date(m.created_at) > since
+  ).length;
+  res.json({ new_matches: newMatches, unread_messages: unreadMessages });
+});
+
 app.get('/api/matches', (req, res) => {
   const uid = parseInt(req.query.user_id);
   if (!uid) return res.status(400).json({ error: 'user_id requerido' });
