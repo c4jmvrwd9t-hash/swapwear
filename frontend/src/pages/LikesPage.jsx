@@ -53,7 +53,7 @@ export default function LikesPage({ user }) {
   return (
     <div className="matches-page">
       <div className="page-header">
-        <h2 className="page-title">Guardados</h2>
+        <h2 className="page-title">Chats</h2>
         <p className="page-subtitle">
           {convos.length === 0
             ? 'Todavía no guardaste ninguna prenda'
