@@ -142,7 +142,9 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--nav-h);
+  /* Reserve the nav height PLUS the iOS home-indicator inset, since the
+     fixed nav's visual footprint is nav-h + safe-area-inset-bottom. */
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
 }
 
 /* ===== BOTTOM NAV ===== */
@@ -1214,6 +1216,10 @@ body {
   justify-content: center;
   gap: 1.25rem;
   padding: 0.25rem 0;
+  /* Comfortable tap clearance above the bottom nav */
+  margin-top: auto;
+  padding-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .action-btn {
