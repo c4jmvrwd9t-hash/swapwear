@@ -257,9 +257,13 @@ export default function SwipePage({ user }) {
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
             </button>
-            <div className="swipe-counter">
-              <span className="counter-num">{likeCount}</span>
-              <span className="counter-label">💖</span>
+            <div
+              className="swipe-counter"
+              title={`${likeCount} likes hoy`}
+              aria-label={`${likeCount} likes hoy`}
+            >
+              <span className="counter-num">💖 {likeCount}</span>
+              <span className="counter-label">likes hoy</span>
             </div>
             <button
               className="action-btn like-btn"
