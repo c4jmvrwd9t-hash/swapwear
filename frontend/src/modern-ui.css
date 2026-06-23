@@ -1,0 +1,272 @@
+/* ============================================================
+   SwapWear · MODERN UI LAYER
+   Capa aditiva que se importa DESPUÉS de App.css.
+   No modifica el CSS existente: solo lo eleva.
+   Para desactivar todo: quita el import en main.jsx.
+   ============================================================ */
+
+:root {
+  /* Escala de elevación (lo que más le faltaba a la app) */
+  --shadow-xs: 0 1px 2px rgba(26, 26, 46, 0.06);
+  --shadow-sm: 0 2px 8px rgba(26, 26, 46, 0.08);
+  --shadow-md: 0 6px 20px rgba(26, 26, 46, 0.10);
+  --shadow-lg: 0 16px 40px rgba(26, 26, 46, 0.14);
+
+  /* Glows de color para acentos */
+  --glow-red: 0 8px 20px rgba(255, 68, 88, 0.35);
+  --glow-purple: 0 8px 20px rgba(108, 99, 255, 0.32);
+
+  /* Gradientes de marca */
+  --grad-brand: linear-gradient(135deg, #FF4458 0%, #FF6B7D 50%, #6C63FF 130%);
+  --grad-red: linear-gradient(135deg, #FF5468 0%, #FF3147 100%);
+  --grad-purple: linear-gradient(135deg, #7C74FF 0%, #5B52E8 100%);
+
+  /* Escala de radios con jerarquía real */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 8px;
+  --radius-lg: 20px;
+
+  /* Curva de animación con rebote sutil */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================================
+   PROFUNDIDAD GLOBAL · tarjetas, header, nav, menús
+   ============================================================ */
+.app-header { box-shadow: var(--shadow-sm); }
+.bottom-nav { box-shadow: 0 -2px 16px rgba(26, 26, 46, 0.07); }
+.user-menu-dropdown { box-shadow: var(--shadow-lg); border-radius: 14px; }
+.like-card,
+.match-card,
+.login-card,
+.countdown-unit { box-shadow: var(--shadow-sm); }
+
+.like-card,
+.match-card {
+  border-radius: 16px;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+.like-card:hover,
+.match-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ============================================================
+   BOTONES 3D ANIMADOS · el corazón del rediseño
+   Relieve con borde inferior + se "hunden" al presionar.
+   ============================================================ */
+.btn-primary {
+  position: relative;
+  background: var(--grad-red);
+  border-radius: 12px;
+  box-shadow: var(--glow-red), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.18s var(--ease-bounce),
+              box-shadow 0.2s var(--ease-out),
+              filter 0.2s;
+  overflow: hidden;
+}
+.btn-primary:hover:not(:disabled) {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(255, 68, 88, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  filter: brightness(1.04);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 3px 10px rgba(255, 68, 88, 0.3);
+}
+/* Brillo que cruza el botón al pasar el cursor */
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s var(--ease-out);
+  pointer-events: none;
+}
+.btn-primary:hover:not(:disabled)::after { left: 140%; }
+
+.email-submit-btn {
+  background: var(--grad-red) !important;
+  border-radius: 12px;
+  box-shadow: var(--glow-red);
+  transition: transform 0.18s var(--ease-bounce), box-shadow 0.2s, filter 0.2s;
+}
+.email-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+.email-submit-btn:active:not(:disabled) { transform: translateY(1px) scale(0.98); }
+
+.btn-ghost {
+  border-radius: 12px;
+  border-width: 2px;
+  transition: transform 0.18s var(--ease-bounce), border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.btn-ghost:active { transform: translateY(1px) scale(0.98); }
+
+/* Botones sociales con relieve */
+.social-btn {
+  border-radius: 12px;
+  box-shadow: var(--shadow-xs);
+  transition: transform 0.18s var(--ease-bounce), box-shadow 0.2s, opacity 0.15s;
+}
+.social-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.social-btn:active:not(:disabled) { transform: translateY(1px) scale(0.98); }
+
+/* ============================================================
+   BOTONES DE SWIPE ✗ / ❤️ · el gesto central, ahora táctil
+   ============================================================ */
+.action-btn {
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s var(--ease-bounce), box-shadow 0.2s, opacity 0.15s;
+}
+.action-btn:hover {
+  opacity: 1;
+  transform: translateY(-3px) scale(1.08);
+}
+.action-btn:active {
+  opacity: 1;
+  transform: scale(0.9);
+}
+.pass-btn {
+  border-width: 2px;
+}
+.pass-btn:hover {
+  border-color: var(--red);
+  box-shadow: 0 10px 24px rgba(255, 68, 88, 0.22);
+}
+.like-btn {
+  background: var(--grad-red);
+  box-shadow: var(--glow-red);
+}
+.like-btn:hover {
+  box-shadow: 0 14px 30px rgba(255, 68, 88, 0.5);
+  animation: heart-pulse 0.9s ease-in-out infinite;
+}
+@keyframes heart-pulse {
+  0%, 100% { transform: translateY(-3px) scale(1.08); }
+  50%      { transform: translateY(-3px) scale(1.16); }
+}
+
+/* ============================================================
+   NAV INFERIOR · indicador animado + pop del icono activo
+   ============================================================ */
+.bnav-btn::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 0;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--grad-red);
+  transform: translateX(-50%);
+  transition: width 0.3s var(--ease-bounce);
+}
+.bnav-btn.active::before { width: 26px; }
+.bnav-btn.active svg {
+  transform: scale(1.18) translateY(-1px);
+  transition: transform 0.3s var(--ease-bounce);
+  filter: drop-shadow(0 3px 6px rgba(255, 68, 88, 0.35));
+}
+
+/* ============================================================
+   CHIPS / SELECTORES · feedback al presionar
+   ============================================================ */
+.user-chip,
+.hashtag-btn,
+.garment-btn,
+.size-btn,
+.filter-garment-btn,
+.auth-tab,
+.filter-toggle-btn {
+  transition: transform 0.15s var(--ease-bounce), border-color 0.2s,
+              background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.user-chip:active,
+.hashtag-btn:active,
+.garment-btn:active,
+.size-btn:active,
+.filter-garment-btn:active { transform: scale(0.94); }
+
+.garment-btn.selected,
+.size-btn.selected,
+.hashtag-btn.active,
+.filter-garment-btn.selected {
+  box-shadow: var(--glow-purple);
+}
+.auth-tab.active { box-shadow: var(--shadow-xs); }
+
+/* ============================================================
+   LOGO · pequeño gradiente de marca
+   ============================================================ */
+.logo-text {
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================================
+   SKELETONS · percepción de carga más fluida
+   Usa <div class="skeleton" /> donde quieras
+   ============================================================ */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #eceff5;
+  border-radius: 10px;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: skeleton-shine 1.4s infinite;
+}
+@keyframes skeleton-shine { 100% { transform: translateX(100%); } }
+
+/* ============================================================
+   ENTRADA SUAVE · tarjetas y vistas aparecen con vida
+   ============================================================ */
+.like-card,
+.match-card { animation: rise-in 0.45s var(--ease-out) both; }
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   ACCESIBILIDAD
+   ============================================================ */
+:focus-visible {
+  outline: 3px solid rgba(108, 99, 255, 0.5);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
