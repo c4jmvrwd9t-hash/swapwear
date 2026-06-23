@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase.js';
+import '../login.css';
 
 const PROMO_END = new Date('2026-05-11T23:59:59-03:00');
 
@@ -23,7 +24,7 @@ function fmt(ms) {
 
 function GoogleIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24">
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
       <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
       <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -42,13 +43,28 @@ const FIREBASE_ERRORS = {
   'auth/too-many-requests': 'Demasiados intentos. Esperá unos minutos.',
 };
 
+const STEPS = [
+  { icon: '👆', title: 'Deslizá', desc: 'Descubrí prendas con un gesto' },
+  { icon: '💬', title: 'Conectá', desc: 'Chateá con quien las tiene' },
+  { icon: '🔄', title: 'Intercambiá', desc: 'Cerrá el swap o la compra' },
+];
+
+// Cartas decorativas para la previsualización del swipe
+const PREVIEW_CARDS = [
+  { emoji: '👖', name: 'Jean baggy y2k', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#3a2a5e,#1c1430)' },
+  { emoji: '🧥', name: 'Campera oversize', tag: '$ 18.000', grad: 'linear-gradient(160deg,#5e2a4d,#2a1430)' },
+  { emoji: '👗', name: 'Vestido vintage', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#2a3a5e,#141c30)' },
+];
+
 export default function LoginPage() {
   const [mode, setMode] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const tablistRef = useRef(null);
   const timeLeft = useCountdown();
   const promoActive = timeLeft > 0;
   const { d, h, m, s } = fmt(timeLeft);
@@ -100,139 +116,204 @@ export default function LoginPage() {
     }
   };
 
+  const switchMode = (next) => { setMode(next); setError(''); setResetSent(false); };
+
+  // Navegación con flechas entre pestañas (WCAG 4.1.2 / patrón ARIA tabs)
+  const onTabKeyDown = (e) => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    const next = mode === 'login' ? 'register' : 'login';
+    switchMode(next);
+    requestAnimationFrame(() => {
+      tablistRef.current?.querySelector(`#tab-${next}`)?.focus();
+    });
+  };
+
   return (
-    <div className="login-page">
-      <div className="login-bg">
-        <div className="login-blob blob1" />
-        <div className="login-blob blob2" />
+    <div className="lx">
+      {/* Fondo de auroras animadas */}
+      <div className="lx-aurora" aria-hidden="true">
+        <span className="lx-blob b1" />
+        <span className="lx-blob b2" />
+        <span className="lx-blob b3" />
       </div>
 
-      <div className="login-content">
-        <div className="login-hero">
-          <div className="login-icon">👗</div>
-          <h1 className="login-title">SwapWear</h1>
-          <p className="login-subtitle">Deslizá, descubrí y conseguí las prendas que querés</p>
-        </div>
-
-        {promoActive && (
-          <div className="promo-banner">
-            <div className="promo-header">
-              <span className="promo-gift">🎁</span>
-              <span className="promo-title">Oferta de lanzamiento</span>
-            </div>
-            <p className="promo-desc">
-              Entra ahora y obtén <strong>40 swaps diarios para siempre</strong>
-            </p>
-            <div className="promo-countdown">
-              <div className="countdown-unit">
-                <span className="countdown-num">{d}</span>
-                <span className="countdown-label">días</span>
-              </div>
-              <span className="countdown-sep">:</span>
-              <div className="countdown-unit">
-                <span className="countdown-num">{h}</span>
-                <span className="countdown-label">horas</span>
-              </div>
-              <span className="countdown-sep">:</span>
-              <div className="countdown-unit">
-                <span className="countdown-num">{m}</span>
-                <span className="countdown-label">min</span>
-              </div>
-              <span className="countdown-sep">:</span>
-              <div className="countdown-unit">
-                <span className="countdown-num">{s}</span>
-                <span className="countdown-label">seg</span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="login-card">
-          <div className="auth-tabs">
-            <button
-              className={`auth-tab ${mode === 'login' ? 'active' : ''}`}
-              onClick={() => { setMode('login'); setError(''); }}
-            >
-              Iniciar sesión
-            </button>
-            <button
-              className={`auth-tab ${mode === 'register' ? 'active' : ''}`}
-              onClick={() => { setMode('register'); setError(''); }}
-            >
-              Registrarse
-            </button>
+      <div className="lx-grid">
+        {/* ── Columna izquierda: historia de producto ── */}
+        <section className="lx-story">
+          <div className="lx-brand">
+            <span className="lx-logo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 21.6C6.4 16.1 1 11.3 1 7.2 1 3.4 4.1 2 6.3 2c1.3 0 4.2.5 5.7 4.5C13.6 2.5 16.5 2 17.7 2 20.3 2 23 3.6 23 7.2c0 4.1-5.1 8.6-11 14.4z"/>
+              </svg>
+            </span>
+            <h1 className="lx-wordmark">SwapWear</h1>
           </div>
 
-          <div className="social-buttons">
-            <button
-              className="social-btn google-btn"
-              onClick={signInWithGoogle}
-              disabled={loading}
-            >
-              {loading === true && !email ? <span className="spinner-sm spinner-dark" /> : <GoogleIcon />}
-              Continuar con Google
-            </button>
+          <h2 className="lx-headline">Tu vestidor del futuro</h2>
+          <p className="lx-lede">Deslizá, descubrí y conseguí las prendas que querés.</p>
+
+          <ul className="lx-steps">
+            {STEPS.map(step => (
+              <li key={step.title} className="lx-step">
+                <span className="lx-step-ic" aria-hidden="true">{step.icon}</span>
+                <span className="lx-step-tx">
+                  <strong>{step.title}</strong>
+                  <span>{step.desc}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Previsualización del gesto de swipe (decorativa) */}
+          <div className="lx-preview" aria-hidden="true">
+            {PREVIEW_CARDS.map((c, i) => (
+              <article
+                key={c.name}
+                className={`lx-pcard ${i === 0 ? 'is-top' : ''}`}
+                style={{ '--i': i, background: c.grad }}
+              >
+                <span className="lx-pcard-emoji">{c.emoji}</span>
+                <div className="lx-pcard-meta">
+                  <strong>{c.name}</strong>
+                  <span className="lx-pcard-tag">{c.tag}</span>
+                </div>
+              </article>
+            ))}
           </div>
 
-          <div className="auth-divider">
-            <span>o</span>
-          </div>
+          {/* Señales de confianza (sin métricas inventadas) */}
+          <ul className="lx-trust">
+            <li><span aria-hidden="true">🔒</span> Intercambio seguro</li>
+            <li><span aria-hidden="true">✨</span> Comunidad en crecimiento</li>
+            <li><span aria-hidden="true">🎁</span> Empezar es gratis</li>
+          </ul>
+        </section>
 
-          <form className="email-form" onSubmit={handleEmailSubmit}>
-            <div className="input-group">
-              <label className="input-label">Email</label>
-              <input
-                className="input-field"
-                type="email"
-                placeholder="tu@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                disabled={loading}
-                autoComplete="email"
-              />
-            </div>
-            <div className="input-group">
-              <label className="input-label">Contraseña</label>
-              <input
-                className="input-field"
-                type="password"
-                placeholder="Mínimo 6 caracteres"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-              />
-            </div>
+        {/* ── Columna derecha: panel de auth en vidrio ── */}
+        <section className="lx-auth">
+          <div className="lx-card">
+            {promoActive && (
+              <div className="lx-promo">
+                <span className="lx-promo-gift" aria-hidden="true">🎁</span>
+                <span className="lx-promo-tx">
+                  <strong>Oferta de lanzamiento</strong>
+                  <span>40 swaps diarios para siempre</span>
+                </span>
+                <span className="lx-promo-time" aria-label={`Quedan ${d} días, ${h} horas, ${m} minutos`}>
+                  {d}d {h}:{m}:{s}
+                </span>
+              </div>
+            )}
 
-            {mode === 'login' && (
-              <button type="button" className="forgot-btn" onClick={handleForgotPassword} disabled={loading}>
-                ¿Olvidaste tu contraseña?
+            <div className="lx-tabs" role="tablist" aria-label="Acceder o registrarse" ref={tablistRef} onKeyDown={onTabKeyDown}>
+              <button
+                id="tab-login"
+                role="tab"
+                aria-selected={mode === 'login'}
+                aria-controls="panel-auth"
+                tabIndex={mode === 'login' ? 0 : -1}
+                className={`lx-tab ${mode === 'login' ? 'active' : ''}`}
+                onClick={() => switchMode('login')}
+              >
+                Iniciar sesión
               </button>
-            )}
+              <button
+                id="tab-register"
+                role="tab"
+                aria-selected={mode === 'register'}
+                aria-controls="panel-auth"
+                tabIndex={mode === 'register' ? 0 : -1}
+                className={`lx-tab ${mode === 'register' ? 'active' : ''}`}
+                onClick={() => switchMode('register')}
+              >
+                Registrarse
+              </button>
+            </div>
 
-            {error && <p className="form-error">{error}</p>}
-            {resetSent && (
-              <p className="form-success">Te enviamos un email para recuperar tu contraseña.</p>
-            )}
+            <div id="panel-auth" role="tabpanel" aria-labelledby={`tab-${mode}`} className="lx-panel">
+              <button className="lx-google" onClick={signInWithGoogle} disabled={loading}>
+                {loading && !email ? <span className="lx-spin" /> : <GoogleIcon />}
+                Continuar con Google
+              </button>
 
-            <button
-              type="submit"
-              className="social-btn email-submit-btn"
-              disabled={loading}
-            >
-              {loading && email
-                ? <span className="spinner-sm" />
-                : mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'
-              }
-            </button>
-          </form>
+              <div className="lx-divider"><span>o</span></div>
 
-          <p className="login-legal">
-            Al continuar aceptás que SwapWear use tus datos básicos de perfil.
-          </p>
-        </div>
+              <form className="lx-form" onSubmit={handleEmailSubmit}>
+                <div className="lx-field">
+                  <label htmlFor="lx-email">Email</label>
+                  <input
+                    id="lx-email"
+                    type="email"
+                    placeholder="tu@email.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                    autoComplete="email"
+                  />
+                </div>
+
+                <div className="lx-field">
+                  <label htmlFor="lx-pw">Contraseña</label>
+                  <div className="lx-pw-wrap">
+                    <input
+                      id="lx-pw"
+                      type={showPw ? 'text' : 'password'}
+                      placeholder="Mínimo 6 caracteres"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      required
+                      disabled={loading}
+                      autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                      aria-describedby={error ? 'lx-error' : undefined}
+                    />
+                    <button
+                      type="button"
+                      className="lx-pw-toggle"
+                      onClick={() => setShowPw(v => !v)}
+                      aria-pressed={showPw}
+                      aria-label={showPw ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                    >
+                      {showPw ? (
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                          <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                          <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {mode === 'login' && (
+                  <button type="button" className="lx-forgot" onClick={handleForgotPassword} disabled={loading}>
+                    ¿Olvidaste tu contraseña?
+                  </button>
+                )}
+
+                <div className="lx-feedback" id="lx-error" role="status" aria-live="polite">
+                  {error && <p className="lx-error">{error}</p>}
+                  {resetSent && <p className="lx-success">Te enviamos un email para recuperar tu contraseña.</p>}
+                </div>
+
+                <button type="submit" className="lx-submit" disabled={loading}>
+                  {loading && email
+                    ? <span className="lx-spin" />
+                    : mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+                </button>
+              </form>
+
+              <p className="lx-legal">
+                Al continuar aceptás que SwapWear use tus datos básicos de perfil.
+              </p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
