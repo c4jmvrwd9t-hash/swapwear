@@ -907,7 +907,10 @@ body {
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
-  overflow: hidden;
+  /* No overflow clip here: the dragged card must slide off-screen
+     horizontally without being cut at the container edge. Vertical fit is
+     already guaranteed by the flex layout (card-stack flex:1 / min-height:0),
+     and the filter panel is self-bounded, so nothing overflows the nav. */
 }
 
 .swipe-loading, .end-state {
@@ -1016,6 +1019,11 @@ body {
   flex-direction: column;
   gap: 1.1rem;
   animation: slide-down 0.2s ease;
+  /* Stay within the (now unclipped) swipe-page: scroll internally instead of
+     pushing the card/buttons under the bottom nav. */
+  flex-shrink: 0;
+  max-height: calc(100% - 7rem);
+  overflow-y: auto;
 }
 .filter-section { display: flex; flex-direction: column; gap: 0.5rem; }
 .filter-section-title {

@@ -168,19 +168,21 @@
 /* ============================================================
    NAV INFERIOR · indicador animado + pop del icono activo
    ============================================================ */
+/* Indicador como subrayado sutil DEBAJO del texto, sin tocar el ícono */
 .bnav-btn::before {
   content: '';
   position: absolute;
-  top: 8px;
+  top: auto;
+  bottom: 5px;
   left: 50%;
   width: 0;
-  height: 4px;
+  height: 3px;
   border-radius: 999px;
   background: var(--grad-red);
   transform: translateX(-50%);
   transition: width 0.3s var(--ease-bounce);
 }
-.bnav-btn.active::before { width: 26px; }
+.bnav-btn.active::before { width: 22px; }
 .bnav-btn.active svg {
   transform: scale(1.18) translateY(-1px);
   transition: transform 0.3s var(--ease-bounce);
