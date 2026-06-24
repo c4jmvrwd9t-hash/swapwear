@@ -10,6 +10,7 @@ import LikesPage from './pages/LikesPage.jsx';
 import MatchesPage from './pages/MatchesPage.jsx';
 import SubscriptionPage from './pages/SubscriptionPage.jsx';
 import FeedbackPage from './pages/FeedbackPage.jsx';
+import { Icon, Logo } from './components/Icons.jsx';
 
 export default function App() {
   const [firebaseUser, setFirebaseUser] = useState(undefined);
@@ -105,35 +106,36 @@ export default function App() {
   const avatarUrl = internalUser.avatar || firebaseUser.photoURL;
   const displayName = internalUser.username || firebaseUser.displayName?.split(' ')[0] || 'Usuario';
 
-  const accountBadge = internalUser.account_type === 'store' ? '🏪' : '👤';
-
   return (
     <div className="app">
       <header className="app-header">
         <div className="header-logo">
-          <span className="logo-icon">👗</span>
+          <Logo size={28} />
           <span className="logo-text">SwapWear</span>
         </div>
         <div className="user-menu-wrap">
-          <button className="user-chip" onClick={() => setMenuOpen(o => !o)}>
+          <button className="user-chip" onClick={() => setMenuOpen(o => !o)} aria-haspopup="menu" aria-expanded={menuOpen} aria-label="Abrir menú de perfil">
             {avatarUrl
-              ? <img src={avatarUrl} alt={displayName} className="user-avatar-img" />
+              ? <img src={avatarUrl} alt="" className="user-avatar-img" />
               : <span className="user-avatar">{displayName[0].toUpperCase()}</span>
             }
-            <span className="user-name">{accountBadge} {displayName}</span>
+            <span className="user-name">
+              {internalUser.account_type === 'store' ? <Icon.Store size={14} /> : <Icon.User size={14} />}
+              {displayName}
+            </span>
           </button>
           {menuOpen && (
             <>
               <div className="user-menu-backdrop" onClick={() => setMenuOpen(false)} />
-              <div className="user-menu-dropdown">
-                <button className="user-menu-item" onClick={() => { setMenuOpen(false); setShowProfileEdit(true); }}>
-                  ✏️ Editar perfil
+              <div className="user-menu-dropdown" role="menu">
+                <button className="user-menu-item" role="menuitem" onClick={() => { setMenuOpen(false); setShowProfileEdit(true); }}>
+                  <Icon.Edit size={18} /> Editar perfil
                 </button>
-                <button className="user-menu-item" onClick={() => { setMenuOpen(false); setShowSub(true); }}>
-                  {internalUser.tier === 'pro' ? '⚡ Plan Pro' : internalUser.tier === 'basic' ? '✦ Plan Básico' : '⚡ Mejorar plan'}
+                <button className="user-menu-item" role="menuitem" onClick={() => { setMenuOpen(false); setShowSub(true); }}>
+                  <Icon.Sparkles size={18} /> {internalUser.tier === 'pro' ? 'Plan Pro' : internalUser.tier === 'basic' ? 'Plan Básico' : 'Mejorar plan'}
                 </button>
-                <button className="user-menu-item signout" onClick={handleSignOut}>
-                  Cerrar sesión
+                <button className="user-menu-item signout" role="menuitem" onClick={handleSignOut}>
+                  <Icon.Logout size={18} /> Cerrar sesión
                 </button>
               </div>
             </>
@@ -165,49 +167,35 @@ export default function App() {
         {tab === 'feedback' && <FeedbackPage user={internalUser} />}
       </main>
 
-      <nav className="bottom-nav">
-        <button className={`bnav-btn ${tab === 'swipe' ? 'active' : ''}`} onClick={() => setTab('swipe')}>
-          <svg viewBox="0 0 24 24" fill={tab === 'swipe' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-            <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
-          </svg>
+      <nav className="bottom-nav" aria-label="Navegación principal">
+        <button className={`bnav-btn ${tab === 'swipe' ? 'active' : ''}`} onClick={() => setTab('swipe')} aria-current={tab === 'swipe' ? 'page' : undefined} aria-label="Explorar">
+          <Icon.Compass />
           <span>Explorar</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'matches' ? 'active' : ''}`} onClick={goToMatches}>
+        <button className={`bnav-btn ${tab === 'matches' ? 'active' : ''}`} onClick={goToMatches} aria-current={tab === 'matches' ? 'page' : undefined} aria-label="Matches">
           <span style={{ position: 'relative', display: 'inline-flex' }}>
-            <svg viewBox="0 0 24 24" fill={tab === 'matches' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-            </svg>
+            <Icon.Inbox />
             {matchNotif > 0 && <span className="bnav-badge">{matchNotif}</span>}
           </span>
           <span>Matches</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'likes' ? 'active' : ''}`} onClick={goToSaved}>
+        <button className={`bnav-btn ${tab === 'likes' ? 'active' : ''}`} onClick={goToSaved} aria-current={tab === 'likes' ? 'page' : undefined} aria-label="Chats">
           <span style={{ position: 'relative', display: 'inline-flex' }}>
-            <svg viewBox="0 0 24 24" fill={tab === 'likes' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-              <path d="M14 9a2 2 0 01-2 2H6l-4 4V4a2 2 0 012-2h8a2 2 0 012 2z"/>
-              <path d="M18 9h2a2 2 0 012 2v11l-4-4h-6a2 2 0 01-2-2v-1"/>
-            </svg>
+            <Icon.Chats />
             {savedNotif > 0 && <span className="bnav-badge">{savedNotif}</span>}
           </span>
           <span>Chats</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'upload' ? 'active' : ''}`} onClick={() => setTab('upload')}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="18" height="18" rx="3"/>
-            <path d="M12 8v8M8 12l4-4 4 4"/>
-          </svg>
+        <button className={`bnav-btn ${tab === 'upload' ? 'active' : ''}`} onClick={() => setTab('upload')} aria-current={tab === 'upload' ? 'page' : undefined} aria-label="Mis prendas">
+          <Icon.Grid />
           <span>Mis Prendas</span>
         </button>
 
-        <button className={`bnav-btn ${tab === 'feedback' ? 'active' : ''}`} onClick={() => setTab('feedback')}>
-          <svg viewBox="0 0 24 24" fill={tab === 'feedback' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
-            <path d="M11 5H6a2 2 0 00-2 2v11l4-4h7a2 2 0 002-2v-1"/>
-            <path d="M15 3h6v6h-6z"/>
-            <path d="M18 3v6M15 6h6"/>
-          </svg>
+        <button className={`bnav-btn ${tab === 'feedback' ? 'active' : ''}`} onClick={() => setTab('feedback')} aria-current={tab === 'feedback' ? 'page' : undefined} aria-label="Feedback">
+          <Icon.Chat />
           <span>Feedback</span>
         </button>
       </nav>

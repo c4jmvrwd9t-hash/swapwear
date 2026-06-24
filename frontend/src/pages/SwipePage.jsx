@@ -1,20 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
 import SwipeCard from '../components/SwipeCard.jsx';
 import SubscriptionPage from './SubscriptionPage.jsx';
+import { Icon, GarmentIcon } from '../components/Icons.jsx';
 
 const GARMENTS = [
-  { key: 'remera',    label: 'Remera',    icon: '👕' },
-  { key: 'buzo',      label: 'Buzo',      icon: '🧶' },
-  { key: 'camisa',    label: 'Camisa',    icon: '👔' },
-  { key: 'musculosa', label: 'Musculosa', icon: '🎽' },
-  { key: 'jean',      label: 'Jean',      icon: '👖' },
-  { key: 'pantalon',  label: 'Pantalón',  icon: '👗' },
-  { key: 'short',     label: 'Short',     icon: '🩳' },
-  { key: 'vestido',   label: 'Vestido',   icon: '👒' },
-  { key: 'falda',     label: 'Falda',     icon: '🪭' },
-  { key: 'campera',   label: 'Campera',   icon: '🧥' },
-  { key: 'abrigo',    label: 'Abrigo',    icon: '🥼' },
-  { key: 'blazer',    label: 'Blazer',    icon: '🤵' },
+  { key: 'remera',    label: 'Remera'    },
+  { key: 'buzo',      label: 'Buzo'      },
+  { key: 'camisa',    label: 'Camisa'    },
+  { key: 'musculosa', label: 'Musculosa' },
+  { key: 'jean',      label: 'Jean'      },
+  { key: 'pantalon',  label: 'Pantalón'  },
+  { key: 'short',     label: 'Short'     },
+  { key: 'vestido',   label: 'Vestido'   },
+  { key: 'falda',     label: 'Falda'     },
+  { key: 'campera',   label: 'Campera'   },
+  { key: 'abrigo',    label: 'Abrigo'    },
+  { key: 'blazer',    label: 'Blazer'    },
 ];
 
 const STYLE_TAGS = [
@@ -23,6 +24,12 @@ const STYLE_TAGS = [
   '#preppy', '#coquette', '#denim', '#dark', '#casual', '#retro',
   '#boho', '#sporty', '#cargo', '#floral', '#formal', '#colorful',
 ];
+
+// Ícono de prenda por key
+function GI({ name, size = 22 }) {
+  const C = GarmentIcon[name];
+  return C ? <C size={size} /> : null;
+}
 
 export default function SwipePage({ user }) {
   const unlimited  = user.daily_limit === null;
@@ -34,6 +41,7 @@ export default function SwipePage({ user }) {
   const [todayCount, setTodayCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [lastAction, setLastAction] = useState(null);
+  const [lastRemoved, setLastRemoved] = useState(null); // para Deshacer
   const [empty, setEmpty] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({ garment_type: '', tags: [] });
@@ -87,9 +95,10 @@ export default function SwipePage({ user }) {
     }));
   };
 
-  const handleSwipe = useCallback(async (itemId, liked) => {
+  const handleSwipe = useCallback(async (itemId, liked, isSuper = false) => {
     const item = feed.find(i => i.id === itemId);
-    setLastAction({ liked, name: item?.name || 'Prenda' });
+    setLastAction({ liked, isSuper, name: item?.name || 'Prenda' });
+    if (item) setLastRemoved({ item, liked });
 
     const res = await fetch('/api/swipe', {
       method: 'POST',
@@ -105,13 +114,61 @@ export default function SwipePage({ user }) {
     setTimeout(() => setLastAction(null), 1100);
   }, [feed, user.id]);
 
+  // Deshacer (cliente): reinserta la última carta al frente del feed
+  const handleUndo = () => {
+    if (!lastRemoved) return;
+    setFeed(prev => [lastRemoved.item, ...prev.filter(i => i.id !== lastRemoved.item.id)]);
+    setTodayCount(c => Math.max(0, c - 1));
+    if (lastRemoved.liked) setLikeCount(c => Math.max(0, c - 1));
+    setEmpty(false);
+    setLastRemoved(null);
+  };
+
   const activeFilterCount = (filters.garment_type ? 1 : 0) + filters.tags.length;
   const remaining = unlimited ? '∞' : Math.max(0, dailyLimit - todayCount);
   const progress  = unlimited ? 0 : Math.min(todayCount / dailyLimit, 1);
+  const topId = feed[0]?.id;
+
+  // ── Contenido de filtros (rail en desktop · panel toggle en mobile) ──
+  const filtersBlock = (
+    <aside className={`ex-rail ex-filters ${showFilters ? 'open' : ''}`}>
+      <p className="ex-rail-title">Tipo de prenda</p>
+      <div className="filter-garment-grid">
+        {GARMENTS.map(g => (
+          <button
+            key={g.key}
+            type="button"
+            className={`filter-garment-btn ${pendingFilters.garment_type === g.key ? 'selected' : ''}`}
+            onClick={() => setPendingFilters(f => ({ ...f, garment_type: f.garment_type === g.key ? '' : g.key }))}
+            aria-pressed={pendingFilters.garment_type === g.key}
+          >
+            <GI name={g.key} />
+            <span>{g.label}</span>
+          </button>
+        ))}
+      </div>
+      <p className="ex-rail-title">Estilo</p>
+      <div className="hashtag-suggestions">
+        {STYLE_TAGS.map(tag => (
+          <button
+            key={tag}
+            type="button"
+            className={`hashtag-btn ${pendingFilters.tags.includes(tag) ? 'active' : ''}`}
+            onClick={() => toggleTag(tag)}
+            aria-pressed={pendingFilters.tags.includes(tag)}
+          >{tag}</button>
+        ))}
+      </div>
+      <div className="filter-actions">
+        <button className="btn-ghost" onClick={clearFilters}>Limpiar</button>
+        <button className="btn-primary" onClick={applyFilters}>Ver resultados</button>
+      </div>
+    </aside>
+  );
 
   if (loading) {
     return (
-      <div className="swipe-page">
+      <div className="swipe-page ex">
         <div className="swipe-loading"><div className="spinner" /><p>Cargando prendas...</p></div>
       </div>
     );
@@ -119,11 +176,11 @@ export default function SwipePage({ user }) {
 
   if (!unlimited && todayCount >= dailyLimit) {
     return (
-      <div className="swipe-page">
+      <div className="swipe-page ex">
         {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
         <div className="end-state">
-          <div className="end-icon">🎉</div>
-          <h2>¡Límite de hoy alcanzado!</h2>
+          <div className="end-icon-wrap"><Icon.Check size={40} /></div>
+          <h2>Llegaste a tu límite de hoy</h2>
           <p>Volvé mañana para seguir explorando.</p>
           <div className="end-stats">
             <div className="stat-item">
@@ -135,9 +192,9 @@ export default function SwipePage({ user }) {
               <span className="stat-label">Pasaste</span>
             </div>
           </div>
-          {user.promo && <p className="promo-badge-sm">🎁 Miembro fundador · {dailyLimit} swaps/día</p>}
+          {user.promo && <p className="promo-badge-sm">Miembro fundador · {dailyLimit} swaps/día</p>}
           <button className="sub-inline-btn" onClick={() => setShowSub(true)}>
-            ⚡ Swaps ilimitados con Pro
+            <Icon.Sparkles size={18} /> Swaps ilimitados con SwapWear+
           </button>
         </div>
       </div>
@@ -145,138 +202,105 @@ export default function SwipePage({ user }) {
   }
 
   return (
-    <div className="swipe-page">
-      {/* Progress bar + filter */}
-      <div className="swipe-top-bar">
-        <div className="swipe-progress-wrap">
-          <div className="progress-track">
-            <div className="progress-fill" style={{ width: `${progress * 100}%` }} />
-          </div>
-          <div className="progress-meta">
-            <span className="progress-label">{unlimited ? '∞ swaps hoy' : `${remaining} restantes hoy`}</span>
-            {unlimited ? <span className="progress-promo">⚡ Pro</span>
-              : user.promo ? <span className="progress-promo">🎁 {dailyLimit}/día</span> : null}
-          </div>
-        </div>
-        <button
-          className={`filter-toggle-btn ${activeFilterCount > 0 ? 'has-filters' : ''}`}
-          onClick={() => { setPendingFilters(filters); setShowFilters(v => !v); }}
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15">
-            <line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/>
-          </svg>
-          Filtrar
-          {activeFilterCount > 0 && <span className="filter-count">{activeFilterCount}</span>}
-        </button>
-      </div>
+    <div className="swipe-page ex">
+      {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
 
-      {/* Filter panel */}
-      {showFilters && (
-        <div className="filter-panel">
-          <div className="filter-section">
-            <p className="filter-section-title">Tipo de prenda</p>
-            <div className="filter-garment-grid">
-              {GARMENTS.map(g => (
-                <button
-                  key={g.key}
-                  type="button"
-                  className={`filter-garment-btn ${pendingFilters.garment_type === g.key ? 'selected' : ''}`}
-                  onClick={() => setPendingFilters(f => ({ ...f, garment_type: f.garment_type === g.key ? '' : g.key }))}
-                >
-                  <span>{g.icon}</span>
-                  <span>{g.label}</span>
-                </button>
+      {/* ── Columna izquierda (desktop) / panel toggle (mobile) ── */}
+      {filtersBlock}
+
+      {/* ── Columna central: descubrir ── */}
+      <section className="ex-center">
+        <div className="swipe-top-bar">
+          <div className="swipe-progress-wrap">
+            <div className="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax={unlimited ? undefined : dailyLimit} aria-valuenow={unlimited ? undefined : todayCount} aria-label="Swaps usados hoy">
+              <div className="progress-fill" style={{ width: `${progress * 100}%` }} />
+            </div>
+            <div className="progress-meta">
+              <span className="progress-label">{unlimited ? 'Swaps ilimitados' : `${remaining} swaps restantes hoy`}</span>
+              {unlimited ? <span className="progress-promo">SwapWear+</span>
+                : user.promo ? <span className="progress-promo">{dailyLimit}/día</span> : null}
+            </div>
+          </div>
+          <button
+            className={`filter-toggle-btn ex-mobile-only ${activeFilterCount > 0 ? 'has-filters' : ''}`}
+            onClick={() => { setPendingFilters(filters); setShowFilters(v => !v); }}
+            aria-label="Filtrar prendas"
+          >
+            <Icon.Filter size={16} />
+            Filtrar
+            {activeFilterCount > 0 && <span className="filter-count">{activeFilterCount}</span>}
+          </button>
+        </div>
+
+        {/* Chips de filtros activos */}
+        {activeFilterCount > 0 && (
+          <div className="active-filters">
+            {filters.garment_type && (
+              <span className="active-chip">{GARMENTS.find(g => g.key === filters.garment_type)?.label || filters.garment_type}</span>
+            )}
+            {filters.tags.map(t => <span key={t} className="active-chip">{t}</span>)}
+          </div>
+        )}
+
+        {/* Toast */}
+        {lastAction && (
+          <div className={`action-toast ${lastAction.liked ? 'toast-like' : 'toast-pass'}`} role="status" aria-live="polite">
+            {lastAction.isSuper ? '★ Super like' : lastAction.liked ? 'Me gusta' : 'Pasaste'}
+          </div>
+        )}
+
+        {(empty || feed.length === 0) ? (
+          <div className="end-state" style={{ flex: 1 }}>
+            <div className="end-icon-wrap">{activeFilterCount > 0 ? <Icon.Search size={38} /> : <Icon.Sparkles size={38} />}</div>
+            <h2>{activeFilterCount > 0 ? 'Sin resultados' : 'Lo viste todo'}</h2>
+            <p>{activeFilterCount > 0 ? 'No hay prendas con esos filtros.' : 'No quedan más prendas por explorar.'}</p>
+            {activeFilterCount > 0
+              ? <button className="btn-primary" onClick={clearFilters} style={{ marginTop: '1rem' }}>Ver todas</button>
+              : <button className="btn-primary" onClick={() => loadFeed(filters)} style={{ marginTop: '1rem' }}>Recargar</button>}
+          </div>
+        ) : (
+          <>
+            <div className="card-stack">
+              {feed.slice(0, 4).map((item, index) => (
+                <SwipeCard key={item.id} item={item} onSwipe={handleSwipe} isTop={index === 0} stackIndex={index} />
               ))}
             </div>
-          </div>
-          <div className="filter-section">
-            <p className="filter-section-title">Estilo</p>
-            <div className="hashtag-suggestions">
-              {STYLE_TAGS.map(tag => (
-                <button
-                  key={tag}
-                  type="button"
-                  className={`hashtag-btn ${pendingFilters.tags.includes(tag) ? 'active' : ''}`}
-                  onClick={() => toggleTag(tag)}
-                >{tag}</button>
-              ))}
+
+            <div className="swipe-actions">
+              <button className="action-btn act-undo" onClick={handleUndo} disabled={!lastRemoved} aria-label="Deshacer">
+                <Icon.Undo />
+              </button>
+              <button className="action-btn act-pass" onClick={() => topId && handleSwipe(topId, false)} aria-label="Pasar">
+                <Icon.X />
+              </button>
+              <button className="action-btn act-super" onClick={() => topId && handleSwipe(topId, true, true)} aria-label="Super like">
+                <Icon.Star />
+              </button>
+              <button className="action-btn act-like" onClick={() => topId && handleSwipe(topId, true)} aria-label="Me gusta">
+                <Icon.Heart />
+              </button>
             </div>
-          </div>
-          <div className="filter-actions">
-            <button className="btn-ghost" onClick={clearFilters}>Limpiar</button>
-            <button className="btn-primary" onClick={applyFilters}>Ver resultados</button>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </section>
 
-      {/* Active filter chips */}
-      {activeFilterCount > 0 && !showFilters && (
-        <div className="active-filters">
-          {filters.garment_type && (
-            <span className="active-chip">
-              {GARMENTS.find(g => g.key === filters.garment_type)?.icon} {filters.garment_type}
-            </span>
-          )}
-          {filters.tags.map(t => <span key={t} className="active-chip">{t}</span>)}
+      {/* ── Columna derecha (desktop): actividad ── */}
+      <aside className="ex-rail ex-activity ex-desktop-only">
+        <p className="ex-rail-title">Tu actividad de hoy</p>
+        <div className="ex-stat-grid">
+          <div className="ex-stat"><span className="ex-stat-num">{likeCount}</span><span className="ex-stat-lbl">Me gusta</span></div>
+          <div className="ex-stat"><span className="ex-stat-num">{todayCount}</span><span className="ex-stat-lbl">Vistas</span></div>
+          <div className="ex-stat"><span className="ex-stat-num">{remaining}</span><span className="ex-stat-lbl">Restantes</span></div>
         </div>
-      )}
-
-      {/* Toast */}
-      {lastAction && (
-        <div className={`action-toast ${lastAction.liked ? 'toast-like' : 'toast-pass'}`}>
-          {lastAction.liked ? '❤️ Guardado' : '✕ Pasaste'}
-        </div>
-      )}
-
-      {/* Empty state */}
-      {(empty || feed.length === 0) ? (
-        <div className="end-state" style={{ flex: 1 }}>
-          <div className="end-icon">{activeFilterCount > 0 ? '🔍' : '✨'}</div>
-          <h2>{activeFilterCount > 0 ? 'Sin resultados' : '¡Lo viste todo!'}</h2>
-          <p>{activeFilterCount > 0 ? 'No hay prendas con esos filtros.' : 'No quedan más prendas por explorar.'}</p>
-          {activeFilterCount > 0
-            ? <button className="btn-primary" onClick={clearFilters} style={{ marginTop: '1rem' }}>Ver todas</button>
-            : <button className="btn-primary" onClick={() => loadFeed(filters)} style={{ marginTop: '1rem' }}>Recargar</button>
-          }
-        </div>
-      ) : (
-        <>
-          <div className="card-stack">
-            {feed.slice(0, 4).map((item, index) => (
-              <SwipeCard key={item.id} item={item} onSwipe={handleSwipe} isTop={index === 0} stackIndex={index} />
-            ))}
+        {!unlimited && (
+          <div className="ex-plus-card">
+            <Icon.Sparkles size={22} />
+            <strong>SwapWear+</strong>
+            <span>Swaps y prendas sin límite, y aparecés primero.</span>
+            <button className="btn-primary" onClick={() => setShowSub(true)}>Conocer SwapWear+</button>
           </div>
-
-          <div className="swipe-actions">
-            <button
-              className="action-btn pass-btn"
-              onClick={() => feed.length && handleSwipe(feed[0].id, false)}
-              title="Pasar"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="26" height="26">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-            <div
-              className="swipe-counter"
-              title={`${likeCount} likes hoy`}
-              aria-label={`${likeCount} likes hoy`}
-            >
-              <span className="counter-num">💖 {likeCount}</span>
-              <span className="counter-label">likes hoy</span>
-            </div>
-            <button
-              className="action-btn like-btn"
-              onClick={() => feed.length && handleSwipe(feed[0].id, true)}
-              title="Me gusta"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26">
-                <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z"/>
-              </svg>
-            </button>
-          </div>
-        </>
-      )}
+        )}
+      </aside>
     </div>
   );
 }
