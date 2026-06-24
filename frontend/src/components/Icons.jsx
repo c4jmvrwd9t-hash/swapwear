@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 /* ============================================================
    SwapWear · Icon set (línea, estilo Lucide/Tabler)
    24x24, stroke = currentColor. Reemplaza los emojis de UI.
@@ -68,21 +70,46 @@ export const GarmentIcon = {
   blazer: (p) => <S {...p}><path d="M6 8 9 4l3 4 3-4 3 4-1.5 2.5V20h-3l-1.5-6-1.5 6h-3V10.5L6 8Z" /><path d="M9 4v4" /></S>,
 };
 
-/* Marca SwapWear (logo SVG con degradado) */
-export function Logo({ size = 30 }) {
+/* Marca SwapWear · loop de "swap" (infinito) + gancho de percha.
+   variant: undefined = mark con degradado sobre transparente (header)
+            'icon'    = cuadrado redondeado con degradado + mark blanco (app icon)
+            'mono'    = mark en un solo color (currentColor) */
+const MARK_LOOP = 'M32 40C26 30 12 30 12 40C12 50 26 50 32 40C38 30 52 30 52 40C52 50 38 50 32 40Z';
+const MARK_HANGER = 'M32 41V23C32 16.5 24.5 16 26.5 22.5';
+
+export function Logo({ size = 30, variant }) {
+  const gid = useId();
+  if (variant === 'mono') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+        <path d={MARK_LOOP} stroke="currentColor" strokeWidth="6.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={MARK_HANGER} stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+  if (variant === 'icon') {
+    return (
+      <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id={gid} x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#FF5D7E" /><stop offset="1" stopColor="#7D6CFF" />
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="16" fill={`url(#${gid})`} />
+        <path d={MARK_LOOP} stroke="#fff" strokeWidth="6.2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={MARK_HANGER} stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" opacity=".95" />
+      </svg>
+    );
+  }
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true" focusable="false">
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
       <defs>
-        <linearGradient id="sw-logo" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FF5D7E" />
-          <stop offset="1" stopColor="#7D6CFF" />
+        <linearGradient id={gid} x1="10" y1="40" x2="54" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FF5D6E" /><stop offset="0.5" stopColor="#E0497F" /><stop offset="1" stopColor="#7D6CFF" />
         </linearGradient>
       </defs>
-      <rect width="32" height="32" rx="9" fill="url(#sw-logo)" />
-      <path d="M9 12.5 7 14.5l2 2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <path d="M7 14.5h11a3.5 3.5 0 0 1 0 7h-1" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <path d="m23 21.5 2-2-2-2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <path d="M25 19.5H14a3.5 3.5 0 0 1 0-7h1" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity=".55" />
+      <path d={MARK_LOOP} stroke={`url(#${gid})`} strokeWidth="6.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={MARK_HANGER} stroke="#D61F53" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
