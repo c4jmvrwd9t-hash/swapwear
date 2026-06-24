@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react';
 import ChatView from '../components/ChatView.jsx';
+import { Icon } from '../components/Icons.jsx';
 
-export default function LikesPage({ user }) {
+const fmtTime = (iso) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const today = new Date();
+  const sameDay = d.toDateString() === today.toDateString();
+  return sameDay
+    ? d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+    : d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
+};
+
+export default function LikesPage({ user, onNavigate }) {
   const [convos, setConvos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [chatTarget, setChatTarget] = useState(null);
@@ -63,36 +74,39 @@ export default function LikesPage({ user }) {
 
       {convos.length === 0 ? (
         <div className="empty-state">
-          <span>💔</span>
-          <p>Deslizá a la derecha para guardar prendas</p>
-          <p className="empty-hint">Las podrás ver acá y chatear con sus dueños</p>
+          <div className="empty-icon"><Icon.Chats size={34} /></div>
+          <p>Todavía no tenés conversaciones</p>
+          <p className="empty-hint">Deslizá a la derecha en Explorar para guardar prendas y chatear con sus dueños</p>
+          <button className="btn-primary" onClick={() => onNavigate?.('swipe')}>Explorar prendas</button>
         </div>
       ) : (
-        <div className="matches-list">
+        <div className="chat-list">
           {convos.map(convo => (
-            <div key={convo.user.id} className="match-card" onClick={() => openChat(convo)} style={{ cursor: 'pointer' }}>
-              <button className="match-delete-btn" onClick={e => { e.stopPropagation(); deleteChat(convo); }} title="Eliminar chat">✕</button>
-              <div className="match-avatar" style={{ position: 'relative' }}>
+            <div key={convo.user.id} className={`chat-row ${convo.unread > 0 ? 'is-unread' : ''}`} onClick={() => openChat(convo)} role="button" tabIndex={0}
+              onKeyDown={e => { if (e.key === 'Enter') openChat(convo); }}>
+              <div className="chat-row-avatar">
                 {convo.user.avatar
-                  ? <img src={convo.user.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
-                  : convo.user.username[0].toUpperCase()
-                }
-                {convo.unread > 0 && <span className="chat-unread-badge">{convo.unread}</span>}
+                  ? <img src={convo.user.avatar} alt="" />
+                  : <span>{convo.user.username[0].toUpperCase()}</span>}
               </div>
-              <div className="match-info">
-                <p className="match-name">@{convo.user.username}</p>
-                {convo.last_message ? (
-                  <p className="match-last-msg">
-                    {convo.last_message.mine ? 'Vos: ' : ''}{convo.last_message.text}
-                  </p>
-                ) : (
-                  <p className="match-item-label">Le gustó: <strong>{convo.liked_item?.name || 'tu prenda'}</strong></p>
-                )}
+              <div className="chat-row-body">
+                <div className="chat-row-top">
+                  <span className="chat-row-name">@{convo.user.username}</span>
+                  <span className="chat-row-time">{convo.last_message ? fmtTime(convo.last_message.created_at) : ''}</span>
+                </div>
+                <div className="chat-row-bottom">
+                  {convo.last_message ? (
+                    <p className="chat-row-preview">{convo.last_message.mine ? 'Vos: ' : ''}{convo.last_message.text}</p>
+                  ) : (
+                    <p className="chat-row-preview muted">Le gustó {convo.liked_item?.name || 'tu prenda'}</p>
+                  )}
+                  {convo.unread > 0 && <span className="chat-row-unread">{convo.unread}</span>}
+                </div>
               </div>
-              <img src={convo.liked_item?.image_path} alt="" className="match-thumb" />
-              <div className="match-btns" onClick={e => e.stopPropagation()}>
-                <button className="match-btn match-btn-primary" onClick={() => openChat(convo)}>Chatear</button>
-              </div>
+              <img src={convo.liked_item?.image_path} alt="" className="chat-row-thumb" />
+              <button className="chat-row-del" onClick={e => { e.stopPropagation(); deleteChat(convo); }} aria-label="Eliminar conversación">
+                <Icon.X size={16} />
+              </button>
             </div>
           ))}
         </div>

@@ -162,8 +162,8 @@ export default function App() {
             onItemsChange={setUserItems}
           />
         )}
-        {tab === 'matches' && <MatchesPage user={internalUser} />}
-        {tab === 'likes' && <LikesPage user={internalUser} />}
+        {tab === 'matches' && <MatchesPage user={internalUser} onNavigate={setTab} />}
+        {tab === 'likes' && <LikesPage user={internalUser} onNavigate={setTab} />}
         {tab === 'feedback' && <FeedbackPage user={internalUser} />}
       </main>
 
