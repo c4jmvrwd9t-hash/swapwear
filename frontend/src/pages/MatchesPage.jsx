@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ChatView from '../components/ChatView.jsx';
 import { Stars, StarPicker } from '../components/Stars.jsx';
+import { Icon } from '../components/Icons.jsx';
 
 // ─── Rating form inline ───────────────────────────────────────────────────────
 function RateForm({ me, target, onDone }) {
@@ -97,7 +98,7 @@ function ProfileView({ userId, onBack, onChat }) {
 
       {data.items.length === 0 ? (
         <div className="empty-state">
-          <span>👗</span>
+          <div className="empty-icon"><Icon.Grid size={34} /></div>
           <p>Este usuario no tiene prendas publicadas</p>
         </div>
       ) : (
@@ -129,7 +130,7 @@ function ProfileView({ userId, onBack, onChat }) {
 }
 
 // ─── Matches list ─────────────────────────────────────────────────────────────
-export default function MatchesPage({ user }) {
+export default function MatchesPage({ user, onNavigate }) {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('list');
@@ -194,22 +195,23 @@ export default function MatchesPage({ user }) {
         <h2 className="page-title">Matches</h2>
         <p className="page-subtitle">
           {matches.length === 0
-            ? 'Todavía nadie le dio ❤️ a tu ropa'
-            : `${matches.length} ${matches.length === 1 ? 'persona' : 'personas'} le dieron ❤️ a tu ropa`}
+            ? 'Todavía nadie guardó tu ropa'
+            : `${matches.length} ${matches.length === 1 ? 'persona' : 'personas'} guardaron tu ropa`}
         </p>
       </div>
 
       {matches.length === 0 ? (
         <div className="empty-state">
-          <span>💌</span>
-          <p>Cuando alguien le dé corazón a tus prendas, aparecerá acá</p>
+          <div className="empty-icon"><Icon.Inbox size={34} /></div>
+          <p>Cuando alguien guarde tus prendas, aparecerá acá</p>
           <p className="empty-hint">Subí más ropa para que te descubran</p>
+          <button className="btn-primary" onClick={() => onNavigate?.('upload')}>Subí tu primera prenda</button>
         </div>
       ) : (
         <div className="matches-list">
           {matches.map(match => (
             <div key={match.user.id} className="match-card">
-              <button className="match-delete-btn" onClick={() => deleteChat(match)} title="Eliminar chat">✕</button>
+              <button className="match-delete-btn" onClick={() => deleteChat(match)} aria-label="Eliminar chat"><Icon.X size={16} /></button>
               <div className="match-avatar" style={{ position: 'relative' }}>
                 {match.user.username[0].toUpperCase()}
                 {match.unread > 0 && <span className="chat-unread-badge">{match.unread}</span>}
