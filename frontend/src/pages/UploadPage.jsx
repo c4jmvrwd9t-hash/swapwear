@@ -1,5 +1,11 @@
 import { useState, useRef } from 'react';
 import SubscriptionPage from './SubscriptionPage.jsx';
+import { Icon, GarmentIcon } from '../components/Icons.jsx';
+
+function GI({ name, size = 22 }) {
+  const C = GarmentIcon[name];
+  return C ? <C size={size} /> : null;
+}
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Única'];
 
@@ -11,18 +17,18 @@ const HASHTAGS = [
 ];
 
 const GARMENTS = [
-  { key: 'remera',    label: 'Remera',    icon: '👕' },
-  { key: 'buzo',      label: 'Buzo',      icon: '🧶' },
-  { key: 'camisa',    label: 'Camisa',    icon: '👔' },
-  { key: 'musculosa', label: 'Musculosa', icon: '🎽' },
-  { key: 'jean',      label: 'Jean',      icon: '👖' },
-  { key: 'pantalon',  label: 'Pantalón',  icon: '👗' },
-  { key: 'short',     label: 'Short',     icon: '🩳' },
-  { key: 'vestido',   label: 'Vestido',   icon: '👒' },
-  { key: 'falda',     label: 'Falda',     icon: '🪭' },
-  { key: 'campera',   label: 'Campera',   icon: '🧥' },
-  { key: 'abrigo',    label: 'Abrigo',    icon: '🥼' },
-  { key: 'blazer',    label: 'Blazer',    icon: '🤵' },
+  { key: 'remera',    label: 'Remera'    },
+  { key: 'buzo',      label: 'Buzo'      },
+  { key: 'camisa',    label: 'Camisa'    },
+  { key: 'musculosa', label: 'Musculosa' },
+  { key: 'jean',      label: 'Jean'      },
+  { key: 'pantalon',  label: 'Pantalón'  },
+  { key: 'short',     label: 'Short'     },
+  { key: 'vestido',   label: 'Vestido'   },
+  { key: 'falda',     label: 'Falda'     },
+  { key: 'campera',   label: 'Campera'   },
+  { key: 'abrigo',    label: 'Abrigo'    },
+  { key: 'blazer',    label: 'Blazer'    },
 ];
 
 const CUTS = {
@@ -189,11 +195,11 @@ export default function UploadPage({ user, items, onItemsChange }) {
   return (
     <div className="upload-page">
       {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
-      {successMsg && <div className="upload-success-toast">✅ {successMsg}</div>}
+      {successMsg && <div className="upload-success-toast"><Icon.Check size={16} /> {successMsg}</div>}
       <div className="page-header">
         <h2 className="page-title">Mis Prendas</h2>
         <p className="page-subtitle">
-          {unlimited ? `${items.length} prendas · ⚡ ilimitadas` : `${items.length}/${itemLimit} prendas`}
+          {unlimited ? `${items.length} prendas · ilimitadas` : `${items.length}/${itemLimit} prendas`}
         </p>
       </div>
 
@@ -213,8 +219,8 @@ export default function UploadPage({ user, items, onItemsChange }) {
               >
                 {previews.length === 0 ? (
                   <div className="drop-placeholder">
-                    <span className="drop-icon">📷</span>
-                    <p>Arrastra fotos o haz clic</p>
+                    <span className="drop-icon"><Icon.Camera size={30} /></span>
+                    <p>Arrastrá fotos o hacé clic</p>
                     <span className="drop-hint">Hasta 5 fotos · JPG, PNG, WEBP · Máx 15MB c/u</span>
                   </div>
                 ) : (
@@ -251,8 +257,9 @@ export default function UploadPage({ user, items, onItemsChange }) {
                     {GARMENTS.map(g => (
                       <button key={g.key} type="button"
                         className={`garment-btn ${form.garment_type === g.key ? 'selected' : ''}`}
-                        onClick={() => setGarmentType(g.key)}>
-                        <span className="garment-icon">{g.icon}</span>
+                        onClick={() => setGarmentType(g.key)}
+                        aria-pressed={form.garment_type === g.key}>
+                        <span className="garment-icon"><GI name={g.key} /></span>
                         <span className="garment-label">{g.label}</span>
                       </button>
                     ))}
@@ -366,7 +373,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
 
               {error && <p className="form-error">{error}</p>}
               <button className="btn-primary btn-full" type="submit" disabled={loading || !files.length}>
-                {loading ? <span className="spinner-sm" /> : `+ Publicar prenda${files.length > 1 ? ` (${files.length} fotos)` : ''}`}
+                {loading ? <span className="spinner-sm" /> : `Publicar prenda${files.length > 1 ? ` (${files.length} fotos)` : ''}`}
               </button>
             </form>
           </div>
@@ -375,7 +382,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
         {/* Items list */}
         <div className="items-list">
           {items.length === 0 ? (
-            <div className="empty-state"><span>👗</span><p>Aún no has subido ninguna prenda</p></div>
+            <div className="empty-state"><div className="empty-icon"><Icon.Grid size={34} /></div><p>Todavía no subiste ninguna prenda</p></div>
           ) : (
             items.map(item => {
               const photos = item.image_paths?.length ? item.image_paths : [item.image_path];
@@ -386,12 +393,12 @@ export default function UploadPage({ user, items, onItemsChange }) {
                 <div key={item.id} className="item-card">
                   <div className="item-img-stack">
                     <img src={photos[0]} alt={item.name} className="item-img" />
-                    {photos.length > 1 && <span className="item-photo-count">{photos.length} 📸</span>}
+                    {photos.length > 1 && <span className="item-photo-count"><Icon.Camera size={12} /> {photos.length}</span>}
                   </div>
                   <div className="item-info">
                     <h4 className="item-name">{item.name || 'Sin nombre'}</h4>
                     <div className="item-tags-row">
-                      {gLabel && <span className="item-tag">{gLabel.icon} {gLabel.label}</span>}
+                      {gLabel && <span className="item-tag"><GI name={gLabel.key} size={14} /> {gLabel.label}</span>}
                       {item.cut && <span className="item-tag">{item.cut}</span>}
                       {item.size && <span className="item-size">Talle {item.size}</span>}
                     </div>
@@ -413,9 +420,9 @@ export default function UploadPage({ user, items, onItemsChange }) {
           )}
           {!canUpload && (
             <div className="upload-full-notice">
-              <span>✅</span>
+              <div className="empty-icon"><Icon.Check size={28} /></div>
               <p>Alcanzaste el límite de {itemLimit} prendas.</p>
-              <button className="sub-inline-btn" onClick={() => setShowSub(true)}>⚡ Publicar más con Pro</button>
+              <button className="sub-inline-btn" onClick={() => setShowSub(true)}><Icon.Sparkles size={18} /> Publicar más con SwapWear+</button>
             </div>
           )}
         </div>
