@@ -98,12 +98,8 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex }) {
     >
       {isTop && (
         <>
-          <div className="card-label like-label" style={{ opacity: likeOpacity }}>
-            <span>❤️</span> ME GUSTA
-          </div>
-          <div className="card-label nope-label" style={{ opacity: nopeOpacity }}>
-            PASO <span>✕</span>
-          </div>
+          <div className="card-label like-label" style={{ opacity: likeOpacity }}>Me gusta</div>
+          <div className="card-label nope-label" style={{ opacity: nopeOpacity }}>Paso</div>
         </>
       )}
 

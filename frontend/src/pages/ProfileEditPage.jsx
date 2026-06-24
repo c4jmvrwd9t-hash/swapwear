@@ -1,15 +1,11 @@
 import { useState, useRef } from 'react';
+import { Icon } from '../components/Icons.jsx';
 
 const GOALS = [
-  { value: 'intercambio', label: '↔ Intercambiar' },
-  { value: 'venta',       label: '$ Vender'       },
-  { value: 'ambos',       label: '✦ Ambos'        },
+  { value: 'intercambio', label: 'Intercambiar' },
+  { value: 'venta',       label: 'Vender'       },
+  { value: 'ambos',       label: 'Ambos'        },
 ];
-
-const ACCOUNT_LABELS = {
-  person: '👤 Persona',
-  store:  '🏪 Tienda Vintage',
-};
 
 export default function ProfileEditPage({ user, firebaseUser, onClose, onSaved }) {
   const [name, setName]       = useState(user.username || '');
@@ -57,7 +53,7 @@ export default function ProfileEditPage({ user, firebaseUser, onClose, onSaved }
   return (
     <div className="sub-overlay" onClick={onClose}>
       <div className="sub-sheet profile-edit-sheet" onClick={e => e.stopPropagation()}>
-        <button className="sub-close" onClick={onClose}>✕</button>
+        <button className="sub-close" onClick={onClose} aria-label="Cerrar"><Icon.X size={18} /></button>
 
         <p className="sub-eyebrow">Tu cuenta</p>
         <h2 className="sub-title" style={{ marginBottom: '1.5rem' }}>Editar perfil</h2>
@@ -69,7 +65,7 @@ export default function ProfileEditPage({ user, firebaseUser, onClose, onSaved }
               ? <img src={preview} alt="avatar" className="onb-avatar-img" />
               : <div className="onb-avatar-placeholder" style={{ fontSize: '2rem' }}>{name?.[0]?.toUpperCase() || '?'}</div>
             }
-            <div className="onb-avatar-overlay"><span>📷</span></div>
+            <div className="onb-avatar-overlay"><Icon.Camera size={20} /></div>
           </div>
         </div>
         <input
@@ -108,15 +104,16 @@ export default function ProfileEditPage({ user, firebaseUser, onClose, onSaved }
             <label className="input-label">Tipo de cuenta</label>
             <div className="tipo-grid">
               {[
-                { value: 'person', label: '👤 Persona' },
-                { value: 'store',  label: '🏪 Tienda Vintage' },
+                { value: 'person', label: 'Persona', Ic: Icon.User },
+                { value: 'store',  label: 'Tienda Vintage', Ic: Icon.Store },
               ].map(opt => (
                 <button
                   key={opt.value}
                   className={`tipo-btn ${accountType === opt.value ? 'selected' : ''}`}
                   onClick={() => setAccountType(opt.value)}
+                  aria-pressed={accountType === opt.value}
                 >
-                  {opt.label}
+                  <opt.Ic size={16} /> {opt.label}
                 </button>
               ))}
             </div>
