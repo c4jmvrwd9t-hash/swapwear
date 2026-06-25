@@ -51,6 +51,87 @@
 /* Pausa cuando la pestaña no está visible (ahorro de batería) */
 .liquid-bg[data-paused="true"] .liquid-orb { animation-play-state: paused; }
 
+/* ============================================================
+   ETAPA 2 · Superficies a tokens Liquid Glass
+   Blur REAL solo en superficies fijas (topbar + nav).
+   Cards/contenedores que scrollean → glass liviano (blur 8) para
+   mantener el scroll fluido en mobile. Piso de contraste: fill 0.5.
+   ============================================================ */
+
+/* Topbar — fija, blur real + reflejo especular (inset highlight) */
+.app-header {
+  background: var(--lg-fill);
+  backdrop-filter: var(--lg-blur);
+  -webkit-backdrop-filter: var(--lg-blur);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--lg-shadow);
+}
+
+/* Bottom nav — fija, blur fuerte */
+.bottom-nav {
+  background: var(--lg-fill);
+  backdrop-filter: var(--lg-blur-strong);
+  -webkit-backdrop-filter: var(--lg-blur-strong);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--lg-shadow);
+}
+
+/* Cards y contenedores que scrollean — glass LIVIANO (perf) */
+.swipe-card,
+.match-card,
+.like-card,
+.item-card,
+.chat-row,
+.upload-form-card,
+.ex-rail,
+.sub-plan-card,
+.rate-form,
+.rate-done,
+.upload-full-notice,
+.filter-panel {
+  background: var(--lg-fill);
+  backdrop-filter: var(--lg-blur-light);
+  -webkit-backdrop-filter: var(--lg-blur-light);
+  border: var(--lg-border);
+  box-shadow: var(--lg-shadow);
+  border-radius: var(--lg-radius);
+}
+/* Las imágenes superiores siguen el radio nuevo */
+.swipe-card .card-img-wrapper,
+.like-img-wrapper { border-radius: var(--lg-radius) var(--lg-radius) 0 0; }
+
+/* Sheets/overlays — fijos, blur real */
+.sub-sheet,
+.profile-edit-sheet {
+  background: var(--lg-fill);
+  backdrop-filter: var(--lg-blur);
+  -webkit-backdrop-filter: var(--lg-blur);
+  border: var(--lg-border);
+  box-shadow: var(--lg-shadow);
+}
+
+/* Search / filtros / chips — sin blur pesado (scrollean), vidrio sutil.
+   El estado base; los seleccionados conservan su acento del tema. */
+.user-chip,
+.filter-toggle-btn,
+.active-chip {
+  background: var(--lg-fill);
+  backdrop-filter: var(--lg-blur-light);
+  -webkit-backdrop-filter: var(--lg-blur-light);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+.card-chip,
+.garment-btn,
+.size-btn,
+.tipo-btn,
+.hashtag-btn,
+.filter-garment-btn {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+
 /* ── Movimiento reducido ───────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .liquid-orb { animation: none !important; }
