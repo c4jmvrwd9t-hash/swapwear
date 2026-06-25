@@ -1,0 +1,57 @@
+/* ============================================================
+   SwapWear · LIQUID GLASS (iOS 26)
+   Se importa DESPUÉS de App.css y glass.css.
+   Etapa 1: fondo vivo + tokens de vidrio. (Superficies, nav y
+   transiciones llegan en etapas siguientes.)
+   ============================================================ */
+:root {
+  /* Mixin de vidrio (reusar en topbar, cards, chips, search, nav) */
+  --lg-fill:        rgba(255, 255, 255, 0.5);
+  --lg-border:      1px solid rgba(255, 255, 255, 0.65);
+  --lg-shadow:      0 6px 24px rgba(40, 40, 90, 0.10), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  --lg-radius:      20px;
+  --lg-blur:        blur(20px) saturate(180%);   /* superficies fijas (topbar) */
+  --lg-blur-strong: blur(22px) saturate(200%);   /* nav */
+  --lg-blur-light:  blur(8px)  saturate(160%);   /* cards que scrollean (perf) */
+  /* Texto: siempre oscuro sobre el vidrio claro */
+  --lg-ink:   #1A1A2E;
+  --lg-ink-2: #6B6B8A;
+}
+
+/* ── Fondo: gradiente base + orbes flotantes ───────────────── */
+.app { position: relative; z-index: 1; }
+
+.liquid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(160deg, #EEF1FA, #F3EEF9);
+}
+.liquid-orb {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--c);
+  filter: blur(50px);
+  opacity: 0.55;
+  will-change: transform;
+  animation-name: liquid-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes liquid-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(7%, 11%) scale(1.12); }
+  66%      { transform: translate(-9%, -7%) scale(0.94); }
+}
+
+/* Pausa cuando la pestaña no está visible (ahorro de batería) */
+.liquid-bg[data-paused="true"] .liquid-orb { animation-play-state: paused; }
+
+/* ── Movimiento reducido ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-orb { animation: none !important; }
+}

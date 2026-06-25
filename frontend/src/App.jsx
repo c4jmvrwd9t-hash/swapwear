@@ -11,6 +11,7 @@ import MatchesPage from './pages/MatchesPage.jsx';
 import SubscriptionPage from './pages/SubscriptionPage.jsx';
 import FeedbackPage from './pages/FeedbackPage.jsx';
 import { Icon, Logo } from './components/Icons.jsx';
+import LiquidBackground from './components/LiquidBackground.jsx';
 
 export default function App() {
   const [firebaseUser, setFirebaseUser] = useState(undefined);
@@ -107,7 +108,9 @@ export default function App() {
   const displayName = internalUser.username || firebaseUser.displayName?.split(' ')[0] || 'Usuario';
 
   return (
-    <div className="app">
+    <>
+      <LiquidBackground />
+      <div className="app">
       <header className="app-header">
         <div className="header-logo">
           <Logo size={28} />
@@ -199,6 +202,7 @@ export default function App() {
           <span>Feedback</span>
         </button>
       </nav>
-    </div>
+      </div>
+    </>
   );
 }
