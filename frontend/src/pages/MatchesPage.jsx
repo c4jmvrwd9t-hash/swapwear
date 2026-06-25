@@ -73,13 +73,7 @@ function ProfileView({ userId, onBack, onChat }) {
       .then(d => { setData(d); setLoading(false); });
   }, [userId]);
 
-  if (loading) {
-    return (
-      <div className="matches-page">
-        <div className="swipe-loading"><div className="spinner" /></div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="matches-page">
@@ -181,13 +175,7 @@ export default function MatchesPage({ user, onNavigate }) {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="matches-page">
-        <div className="swipe-loading"><div className="spinner" /><p>Cargando matches...</p></div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="matches-page">

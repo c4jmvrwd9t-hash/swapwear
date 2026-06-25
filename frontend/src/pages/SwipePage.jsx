@@ -166,13 +166,7 @@ export default function SwipePage({ user }) {
     </aside>
   );
 
-  if (loading) {
-    return (
-      <div className="swipe-page ex">
-        <div className="swipe-loading"><div className="spinner" /><p>Cargando prendas...</p></div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   if (!unlimited && todayCount >= dailyLimit) {
     return (

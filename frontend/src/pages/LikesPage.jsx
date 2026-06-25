@@ -53,13 +53,7 @@ export default function LikesPage({ user, onNavigate }) {
     return <ChatView me={user} other={chatTarget} onBack={() => { setChatTarget(null); load(); }} />;
   }
 
-  if (loading) {
-    return (
-      <div className="matches-page">
-        <div className="swipe-loading"><div className="spinner" /><p>Cargando...</p></div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="matches-page">
