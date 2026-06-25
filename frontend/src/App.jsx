@@ -13,6 +13,8 @@ import FeedbackPage from './pages/FeedbackPage.jsx';
 import { Icon, Logo } from './components/Icons.jsx';
 import LiquidBackground from './components/LiquidBackground.jsx';
 
+const TAB_ORDER = ['swipe', 'matches', 'likes', 'upload', 'feedback'];
+
 export default function App() {
   const [firebaseUser, setFirebaseUser] = useState(undefined);
   const [internalUser, setInternalUser] = useState(null);
@@ -106,6 +108,7 @@ export default function App() {
 
   const avatarUrl = internalUser.avatar || firebaseUser.photoURL;
   const displayName = internalUser.username || firebaseUser.displayName?.split(' ')[0] || 'Usuario';
+  const tabIndex = Math.max(0, TAB_ORDER.indexOf(tab));
 
   return (
     <>
@@ -171,6 +174,7 @@ export default function App() {
       </main>
 
       <nav className="bottom-nav" aria-label="Navegación principal">
+        <span className="bnav-pill" style={{ left: `calc(${tabIndex} * (100% / 5) + 8px)` }} aria-hidden="true" />
         <button className={`bnav-btn ${tab === 'swipe' ? 'active' : ''}`} onClick={() => setTab('swipe')} aria-current={tab === 'swipe' ? 'page' : undefined} aria-label="Explorar">
           <Icon.Compass />
           <span>Explorar</span>
