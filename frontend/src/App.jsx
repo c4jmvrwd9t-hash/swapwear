@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from './lib/firebase.js';
 import LoginPage from './pages/LoginPage.jsx';
@@ -12,6 +12,8 @@ import SubscriptionPage from './pages/SubscriptionPage.jsx';
 import FeedbackPage from './pages/FeedbackPage.jsx';
 import { Icon, Logo } from './components/Icons.jsx';
 import LiquidBackground from './components/LiquidBackground.jsx';
+
+const TAB_ORDER = ['swipe', 'matches', 'likes', 'upload', 'feedback'];
 
 export default function App() {
   const [firebaseUser, setFirebaseUser] = useState(undefined);
@@ -68,6 +70,12 @@ export default function App() {
     const id = setInterval(fetchNotifs, 30000);
     return () => clearInterval(id);
   }, [internalUser]);
+
+  // Dirección del deslizamiento según el orden del tab destino vs el anterior
+  const tabIndex = TAB_ORDER.indexOf(tab);
+  const prevTabIndex = useRef(tabIndex);
+  const slideDir = tabIndex >= prevTabIndex.current ? 'R' : 'L';
+  useEffect(() => { prevTabIndex.current = tabIndex; }, [tabIndex]);
 
   const goToMatches = () => {
     if (internalUser) localStorage.setItem(`sw_notif_seen_${internalUser.id}`, new Date().toISOString());
@@ -157,20 +165,23 @@ export default function App() {
       )}
 
       <main className="app-main">
-        {tab === 'swipe' && <SwipePage user={internalUser} />}
-        {tab === 'upload' && (
-          <UploadPage
-            user={internalUser}
-            items={userItems}
-            onItemsChange={setUserItems}
-          />
-        )}
-        {tab === 'matches' && <MatchesPage user={internalUser} onNavigate={setTab} />}
-        {tab === 'likes' && <LikesPage user={internalUser} onNavigate={setTab} />}
-        {tab === 'feedback' && <FeedbackPage user={internalUser} />}
+        <div className="tab-panel" key={tab} data-dir={slideDir}>
+          {tab === 'swipe' && <SwipePage user={internalUser} />}
+          {tab === 'upload' && (
+            <UploadPage
+              user={internalUser}
+              items={userItems}
+              onItemsChange={setUserItems}
+            />
+          )}
+          {tab === 'matches' && <MatchesPage user={internalUser} onNavigate={setTab} />}
+          {tab === 'likes' && <LikesPage user={internalUser} onNavigate={setTab} />}
+          {tab === 'feedback' && <FeedbackPage user={internalUser} />}
+        </div>
       </main>
 
       <nav className="bottom-nav" aria-label="Navegación principal">
+        <span className="bnav-pill" style={{ left: `calc(${tabIndex} * (100% / 5) + 8px)` }} />
         <button className={`bnav-btn ${tab === 'swipe' ? 'active' : ''}`} onClick={() => setTab('swipe')} aria-current={tab === 'swipe' ? 'page' : undefined} aria-label="Explorar">
           <Icon.Compass />
           <span>Explorar</span>

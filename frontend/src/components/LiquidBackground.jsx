@@ -6,11 +6,11 @@ import { useEffect, useRef } from 'react';
    y con prefers-reduced-motion (vía CSS). */
 
 const ORBS = [
-  { c: '#FF9E80', top: '-10%', left: '-8%',  size: '48vw', dur: 16 },
-  { c: '#B79CFF', top: '12%',  left: '58%',  size: '44vw', dur: 21 },
-  { c: '#7FC8FF', top: '52%',  left: '-12%', size: '42vw', dur: 14 },
-  { c: '#8FE3C2', top: '66%',  left: '52%',  size: '40vw', dur: 22 },
-  { c: '#FF9EC8', top: '34%',  left: '24%',  size: '36vw', dur: 18 },
+  { c: '#FFFFFF', o: 0.70, top: '-10%', left: '-8%',  size: '48vw', dur: 16 },
+  { c: '#C4CEDC', o: 0.60, top: '12%',  left: '58%',  size: '44vw', dur: 21 },
+  { c: '#DCE4EF', o: 0.65, top: '52%',  left: '-12%', size: '42vw', dur: 14 },
+  { c: '#B9C4D6', o: 0.50, top: '66%',  left: '52%',  size: '40vw', dur: 22 },
+  { c: '#EDEFF5', o: 0.70, top: '34%',  left: '24%',  size: '36vw', dur: 18 },
 ];
 
 export default function LiquidBackground() {
@@ -32,6 +32,7 @@ export default function LiquidBackground() {
           className="liquid-orb"
           style={{
             '--c': o.c,
+            '--o': o.o,
             '--size': o.size,
             top: o.top,
             left: o.left,
