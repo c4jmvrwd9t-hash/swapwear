@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from './lib/firebase.js';
 import LoginPage from './pages/LoginPage.jsx';
@@ -83,6 +83,12 @@ export default function App() {
     setTab('likes');
   };
 
+  // Índice del tab + dirección del deslizamiento (pill de la nav + transición de panel)
+  const tabIndex = Math.max(0, TAB_ORDER.indexOf(tab));
+  const prevTabIndex = useRef(tabIndex);
+  const slideDir = tabIndex >= prevTabIndex.current ? 'R' : 'L';
+  useEffect(() => { prevTabIndex.current = tabIndex; }, [tabIndex]);
+
   const handleSignOut = () => { setMenuOpen(false); firebaseSignOut(auth); };
 
   if (firebaseUser === undefined || syncing) {
@@ -108,7 +114,6 @@ export default function App() {
 
   const avatarUrl = internalUser.avatar || firebaseUser.photoURL;
   const displayName = internalUser.username || firebaseUser.displayName?.split(' ')[0] || 'Usuario';
-  const tabIndex = Math.max(0, TAB_ORDER.indexOf(tab));
 
   return (
     <>
@@ -160,17 +165,19 @@ export default function App() {
       )}
 
       <main className="app-main">
-        {tab === 'swipe' && <SwipePage user={internalUser} />}
-        {tab === 'upload' && (
-          <UploadPage
-            user={internalUser}
-            items={userItems}
-            onItemsChange={setUserItems}
-          />
-        )}
-        {tab === 'matches' && <MatchesPage user={internalUser} onNavigate={setTab} />}
-        {tab === 'likes' && <LikesPage user={internalUser} onNavigate={setTab} />}
-        {tab === 'feedback' && <FeedbackPage user={internalUser} />}
+        <div className="tab-panel" key={tab} data-dir={slideDir}>
+          {tab === 'swipe' && <SwipePage user={internalUser} />}
+          {tab === 'upload' && (
+            <UploadPage
+              user={internalUser}
+              items={userItems}
+              onItemsChange={setUserItems}
+            />
+          )}
+          {tab === 'matches' && <MatchesPage user={internalUser} onNavigate={setTab} />}
+          {tab === 'likes' && <LikesPage user={internalUser} onNavigate={setTab} />}
+          {tab === 'feedback' && <FeedbackPage user={internalUser} />}
+        </div>
       </main>
 
       <nav className="bottom-nav" aria-label="Navegación principal">
