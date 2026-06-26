@@ -6,11 +6,11 @@ import { useEffect, useRef } from 'react';
    y con prefers-reduced-motion (vía CSS). */
 
 const ORBS = [
-  { c: '#FF9E80', top: '-10%', left: '-8%',  size: '48vw', dur: 16 },
-  { c: '#B79CFF', top: '12%',  left: '58%',  size: '44vw', dur: 21 },
-  { c: '#7FC8FF', top: '52%',  left: '-12%', size: '42vw', dur: 14 },
-  { c: '#8FE3C2', top: '66%',  left: '52%',  size: '40vw', dur: 22 },
-  { c: '#FF9EC8', top: '34%',  left: '24%',  size: '36vw', dur: 18 },
+  { c: '#E8DFC9', top: '-10%', left: '-8%',  size: '48vw', dur: 16 },  // arena cálida
+  { c: '#C6CFDA', top: '12%',  left: '58%',  size: '44vw', dur: 21 },  // cemento azulado
+  { c: '#D7CDBC', top: '52%',  left: '-12%', size: '42vw', dur: 14 },  // greige/taupe
+  { c: '#C9CFC0', top: '66%',  left: '52%',  size: '40vw', dur: 22 },  // sage apagado
+  { c: '#DED4C4', top: '34%',  left: '24%',  size: '36vw', dur: 18 },  // arena clara
 ];
 
 export default function LiquidBackground() {

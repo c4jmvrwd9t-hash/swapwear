@@ -6,16 +6,26 @@
    ============================================================ */
 :root {
   /* Mixin de vidrio (reusar en topbar, cards, chips, search, nav) */
-  --lg-fill:        rgba(255, 255, 255, 0.5);
-  --lg-border:      1px solid rgba(255, 255, 255, 0.65);
+  --lg-fill:        rgba(255, 255, 255, 0.45);
+  --lg-border:      1px solid rgba(255, 255, 255, 0.25);
   --lg-shadow:      0 6px 24px rgba(40, 40, 90, 0.10), inset 0 1px 1px rgba(255, 255, 255, 0.9);
   --lg-radius:      20px;
-  --lg-blur:        blur(20px) saturate(180%);   /* superficies fijas (topbar) */
-  --lg-blur-strong: blur(22px) saturate(200%);   /* nav */
+  --lg-blur:        blur(16px) saturate(180%);   /* superficies fijas (topbar) */
+  --lg-blur-strong: blur(18px) saturate(200%);   /* nav */
   --lg-blur-light:  blur(8px)  saturate(160%);   /* cards que scrollean (perf) */
   /* Texto: siempre oscuro sobre el vidrio claro */
   --lg-ink:   #1A1A2E;
   --lg-ink-2: #6B6B8A;
+
+  /* ── Acento navy (neo-vintage streetwear) — reemplaza el magenta/violeta ── */
+  --accent:        #1B2A4A;
+  --accent-deep:   #16223C;
+  --accent-tint:   rgba(27, 42, 74, 0.10);
+  --rose:          #1B2A4A;
+  --rose-deep:     #1B2A4A;
+  --lilac:         #1B2A4A;
+  --grad-strong:   #1B2A4A;
+  --grad-soft:     linear-gradient(135deg, #2A3F63, #1B2A4A);
 }
 
 /* ── Fondo: gradiente base + orbes flotantes ───────────────── */
@@ -27,7 +37,7 @@
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(160deg, #EEF1FA, #F3EEF9);
+  background: linear-gradient(160deg, #F4F1EA, #D2D7DF);
 }
 .liquid-orb {
   position: absolute;
@@ -127,9 +137,9 @@
 .tipo-btn,
 .hashtag-btn,
 .filter-garment-btn {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.75);
+  background: rgba(74, 64, 48, 0.08);            /* neutro cálido que combina con la arena */
+  border: 1px solid rgba(74, 64, 48, 0.14);
+  box-shadow: none;
 }
 
 /* ============================================================
@@ -188,6 +198,39 @@
 }
 .tab-panel[data-dir="R"] { animation: slideR 320ms cubic-bezier(0.34, 1.4, 0.5, 1); }
 .tab-panel[data-dir="L"] { animation: slideL 320ms cubic-bezier(0.34, 1.4, 0.5, 1); }
+
+/* ============================================================
+   PALETA · neo-vintage navy
+   Blur 16 en paneles/contenedores + limpieza de restos
+   magenta/violeta hardcodeados (glows y tints) → navy.
+   ============================================================ */
+/* Paneles laterales + contenedor principal: blur de fondo limpio 16px */
+.ex-rail,
+.filter-panel,
+.swipe-card {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+/* Glows de botón: del rosa al navy */
+.btn-primary { box-shadow: 0 10px 24px rgba(27, 42, 74, 0.26); }
+.btn-primary:hover:not(:disabled) { box-shadow: 0 14px 30px rgba(27, 42, 74, 0.34); }
+.act-like { box-shadow: 0 12px 28px rgba(27, 42, 74, 0.30); }
+.act-like:hover:not(:disabled) { box-shadow: 0 16px 34px rgba(27, 42, 74, 0.40); }
+.sub-inline-btn { box-shadow: 0 10px 24px rgba(27, 42, 74, 0.28); }
+
+/* Tints violeta/rosa → navy */
+.card-chip.chip-intercambio,
+.tipo-badge.tipo-intercambio { background: var(--accent-tint); color: var(--accent); }
+.card-size-badge { background: var(--accent-tint); }
+.user-menu-item:hover { background: rgba(27, 42, 74, 0.07); }
+.input-field:focus, .textarea:focus { box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.16); }
+.drop-zone { border-color: rgba(27, 42, 74, 0.32); }
+.preview-add { border-color: rgba(27, 42, 74, 0.35); }
+.sub-plan-card.highlighted { box-shadow: 0 12px 30px rgba(27, 42, 74, 0.16); }
+.chat-row-del:hover,
+.match-delete-btn:hover,
+.btn-delete:hover { background: rgba(27, 42, 74, 0.10); }
 
 /* ── Movimiento reducido ───────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
