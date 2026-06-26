@@ -92,7 +92,7 @@ export function Logo({ size = 30, variant }) {
       <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
         <defs>
           <linearGradient id={gid} x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#FF5D7E" /><stop offset="1" stopColor="#7D6CFF" />
+            <stop stopColor="#2A3F63" /><stop offset="1" stopColor="#1B2A4A" />
           </linearGradient>
         </defs>
         <rect width="64" height="64" rx="16" fill={`url(#${gid})`} />
@@ -105,11 +105,11 @@ export function Logo({ size = 30, variant }) {
     <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id={gid} x1="10" y1="40" x2="54" y2="40" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FF5D6E" /><stop offset="0.5" stopColor="#E0497F" /><stop offset="1" stopColor="#7D6CFF" />
+          <stop stopColor="#3A567F" /><stop offset="1" stopColor="#1B2A4A" />
         </linearGradient>
       </defs>
       <path d={MARK_LOOP} stroke={`url(#${gid})`} strokeWidth="6.2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d={MARK_HANGER} stroke="#D61F53" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={MARK_HANGER} stroke="#16223C" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

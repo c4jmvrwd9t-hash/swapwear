@@ -52,9 +52,9 @@ const STEPS = [
 
 // Cartas decorativas para la previsualización del swipe
 const PREVIEW_CARDS = [
-  { emoji: '👖', name: 'Jean baggy y2k', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#3a2a5e,#1c1430)' },
-  { emoji: '🧥', name: 'Campera oversize', tag: '$ 18.000', grad: 'linear-gradient(160deg,#5e2a4d,#2a1430)' },
-  { emoji: '👗', name: 'Vestido vintage', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#2a3a5e,#141c30)' },
+  { emoji: '👖', name: 'Jean baggy y2k', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#2A3F63,#16223C)' },
+  { emoji: '🧥', name: 'Campera oversize', tag: '$ 18.000', grad: 'linear-gradient(160deg,#4A4036,#2A2018)' },
+  { emoji: '👗', name: 'Vestido vintage', tag: '↔ Intercambio', grad: 'linear-gradient(160deg,#3A4A5E,#1B2A3C)' },
 ];
 
 export default function LoginPage() {

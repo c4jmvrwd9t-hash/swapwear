@@ -6,28 +6,28 @@
   --ink: #1d1d1f;
   --ink-2: #515154;
   --ink-3: #6e6e73;
-  --rose: #ff5d7e;
-  --rose-deep: #d61f53;
-  --lilac: #7d6cff;
-  --focus: #7d6cff;
+  --rose: #1B2A4A;
+  --rose-deep: #1B2A4A;
+  --lilac: #1B2A4A;
+  --focus: #1B2A4A;
   --glass: rgba(255, 255, 255, 0.55);
   --glass-2: rgba(255, 255, 255, 0.72);
   --glass-brd: rgba(255, 255, 255, 0.7);
-  --hairline: rgba(40, 20, 60, 0.10);
-  --grad-accent: linear-gradient(120deg, #d61f53, #6240db);
+  --hairline: rgba(40, 30, 20, 0.10);
+  --grad-accent: #1B2A4A;
   --radius-card: 28px;
   --radius-field: 14px;
-  --shadow: 0 20px 60px rgba(40, 20, 60, 0.12);
+  --shadow: 0 20px 60px rgba(40, 35, 25, 0.12);
 
   position: fixed;
   inset: 0;
   overflow-x: hidden;
   overflow-y: auto;
   background:
-    radial-gradient(60% 50% at 8% 0%, rgba(255, 93, 126, 0.12), transparent 60%),
-    radial-gradient(55% 45% at 100% 8%, rgba(125, 108, 255, 0.12), transparent 60%),
-    radial-gradient(70% 60% at 50% 100%, rgba(255, 184, 140, 0.10), transparent 60%),
-    #fbfbfd;
+    radial-gradient(60% 50% at 8% 0%, rgba(198, 207, 218, 0.45), transparent 60%),
+    radial-gradient(55% 45% at 100% 8%, rgba(215, 205, 188, 0.45), transparent 60%),
+    radial-gradient(70% 60% at 50% 100%, rgba(201, 207, 192, 0.40), transparent 60%),
+    linear-gradient(160deg, #F4F1EA, #D2D7DF);
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -36,9 +36,9 @@
 /* Auroras muy suaves */
 .lx-aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .lx-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; will-change: transform; }
-.lx-blob.b1 { width: 42vw; height: 42vw; top: -12%; left: -8%; background: rgba(255, 93, 126, 0.5); animation: lx-float-a 20s ease-in-out infinite; }
-.lx-blob.b2 { width: 38vw; height: 38vw; bottom: -14%; right: -8%; background: rgba(125, 108, 255, 0.5); animation: lx-float-b 24s ease-in-out infinite; }
-.lx-blob.b3 { width: 32vw; height: 32vw; top: 35%; left: 48%; background: rgba(255, 184, 140, 0.45); animation: lx-float-a 28s ease-in-out infinite reverse; }
+.lx-blob.b1 { width: 42vw; height: 42vw; top: -12%; left: -8%; background: rgba(232, 223, 201, 0.6); animation: lx-float-a 20s ease-in-out infinite; }
+.lx-blob.b2 { width: 38vw; height: 38vw; bottom: -14%; right: -8%; background: rgba(198, 207, 218, 0.6); animation: lx-float-b 24s ease-in-out infinite; }
+.lx-blob.b3 { width: 32vw; height: 32vw; top: 35%; left: 48%; background: rgba(215, 205, 188, 0.5); animation: lx-float-a 28s ease-in-out infinite reverse; }
 @keyframes lx-float-a { 50% { transform: translate(8%, 12%) scale(1.12); } }
 @keyframes lx-float-b { 50% { transform: translate(-10%, -8%) scale(1.1); } }
 
@@ -61,7 +61,7 @@
   width: 40px; height: 40px; border-radius: 12px;
   display: grid; place-items: center;
   background: var(--grad-accent); color: #fff;
-  box-shadow: 0 8px 24px rgba(196, 79, 226, 0.32);
+  box-shadow: 0 8px 24px rgba(27, 42, 74, 0.32);
 }
 .lx-wordmark { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
 
@@ -145,7 +145,7 @@
   color: var(--ink-3); font-family: inherit; font-size: 0.9rem; font-weight: 600;
   border-radius: 9px; transition: color 0.2s, background 0.25s;
 }
-.lx-tab.active { color: #fff; background: var(--grad-accent); box-shadow: 0 6px 16px rgba(196, 79, 226, 0.3); }
+.lx-tab.active { color: #fff; background: var(--grad-accent); box-shadow: 0 6px 16px rgba(27, 42, 74, 0.3); }
 
 .lx-panel { display: flex; flex-direction: column; }
 
@@ -199,7 +199,7 @@
   color: var(--lilac); font-family: inherit; font-size: 0.82rem; font-weight: 600;
   text-decoration: underline; text-underline-offset: 2px; padding: 0.2rem 0;
 }
-.lx-forgot:hover { color: #5b52e8; }
+.lx-forgot:hover { color: #16223C; }
 
 .lx-feedback:empty { display: none; }
 .lx-error {
@@ -217,10 +217,10 @@
   min-height: 50px; margin-top: 0.3rem; border: none; border-radius: var(--radius-field);
   background: var(--grad-accent); color: #fff;
   font-family: inherit; font-size: 1rem; font-weight: 600; letter-spacing: 0.01em; cursor: pointer;
-  box-shadow: 0 10px 26px rgba(196, 79, 226, 0.32);
+  box-shadow: 0 10px 26px rgba(27, 42, 74, 0.32);
   transition: transform 0.18s, box-shadow 0.2s, filter 0.2s, opacity 0.2s;
 }
-.lx-submit:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 14px 32px rgba(196, 79, 226, 0.42); }
+.lx-submit:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 14px 32px rgba(27, 42, 74, 0.42); }
 .lx-submit:active:not(:disabled) { transform: translateY(1px) scale(0.99); }
 .lx-submit:disabled { opacity: 0.7; cursor: default; }
 
