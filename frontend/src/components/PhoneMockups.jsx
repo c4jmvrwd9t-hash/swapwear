@@ -8,22 +8,22 @@ const u = (id, w = 640) =>
 export const PRENDAS_DEMO = [
   {
     src: u('1441986300917-64674bd600d8'),
-    alt: 'Vidriera de ropa vintage',
+    alt: 'Interior de tienda de ropa con estantes de camisas y mesa expositora',
     caption: '↔ Intercambio',
   },
   {
     src: u('1445205170230-053b83016050'),
-    alt: 'Perchero con camperas oversize',
+    alt: 'Vidriera de boutique con prendas tejidas en tonos beige colgadas',
     caption: '$ 18.000',
   },
   {
     src: u('1490481651871-ab68de25d43d'),
-    alt: 'Vestido vintage sobre fondo claro',
+    alt: 'Perchero con vestidos y blusas claras sobre pared blanca',
     caption: '↔ Intercambio',
   },
   {
     src: u('1479064555552-3ef4979f8908'),
-    alt: 'Jean baggy y remera estilo y2k',
+    alt: 'Conjunto acomodado: borcegos marrones, pantalón gris, cinto y remera blanca',
     caption: '$ 12.500',
   },
 ];

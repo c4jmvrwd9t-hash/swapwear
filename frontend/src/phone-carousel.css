@@ -148,8 +148,8 @@
 .pc-arrow {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(27, 42, 74, 0.18);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.62);
@@ -231,7 +231,7 @@
   .pc-dot::after {
     content: '';
     position: absolute;
-    inset: -18px -8px;
+    inset: -18px -10px;
   }
 }
 
