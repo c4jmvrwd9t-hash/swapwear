@@ -188,7 +188,7 @@
 .lx-pw-wrap input { padding-right: 3rem; }
 .lx-pw-toggle {
   position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
-  width: 40px; height: 40px; display: grid; place-items: center;
+  width: 44px; height: 44px; display: grid; place-items: center;
   border: none; background: none; cursor: pointer; color: var(--ink-3); border-radius: 10px;
   transition: color 0.2s, background 0.2s;
 }
@@ -197,7 +197,9 @@
 .lx-forgot {
   align-self: flex-end; background: none; border: none; cursor: pointer;
   color: var(--lilac); font-family: inherit; font-size: 0.82rem; font-weight: 600;
-  text-decoration: underline; text-underline-offset: 2px; padding: 0.2rem 0;
+  text-decoration: underline; text-underline-offset: 2px;
+  /* 22px de alto no se puede tocar: se estira a 44 sin mover el subrayado */
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 0.25rem;
 }
 .lx-forgot:hover { color: #16223C; }
 

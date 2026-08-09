@@ -19,6 +19,11 @@
   --radius-xs: 8px;
   --nav-h: 64px;
   --header-h: 56px;
+  /* Área táctil mínima (WCAG 2.5.5 / Apple HIG). --tap-gap es la
+     separación mínima entre dos targets contiguos: sin ella, dos
+     botones de 44px pegados se comen los toques del vecino. */
+  --tap: 44px;
+  --tap-gap: 8px;
 }
 
 body {
@@ -67,6 +72,7 @@ body {
 .user-chip {
   display: flex;
   align-items: center;
+  min-height: var(--tap);
   gap: 0.45rem;
   background: var(--bg);
   border: 1.5px solid var(--border);
@@ -507,6 +513,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  min-height: var(--tap);
   gap: 0.5rem;
   background: var(--red);
   color: white;
@@ -524,6 +531,10 @@ body {
 .btn-full { width: 100%; }
 
 .btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
   background: none;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -546,6 +557,10 @@ body {
   color: var(--muted);
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: var(--tap);
+  height: var(--tap);
+  flex-shrink: 0;
   transition: border-color 0.2s, color 0.2s;
   flex-shrink: 0;
 }
@@ -639,20 +654,37 @@ body {
 .hashtag-suggestions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  /* var(--tap-gap) exacto: los expansores de abajo crecen 4px por lado,
+     así que con 8px de gap las áreas táctiles se tocan sin solaparse. */
+  gap: var(--tap-gap);
   margin-top: 0.4rem;
 }
 .hashtag-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  min-width: var(--tap);
   background: var(--bg);
   border: 1.5px solid var(--border);
   border-radius: 9999px;
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   color: var(--muted);
   transition: all 0.15s;
+}
+/* Son ~30 chips: a 44px reales el formulario crece ~190px. Se quedan en
+   36 visuales y sólo en pantallas táctiles se les extiende el área a 44. */
+@media (pointer: coarse) {
+  .hashtag-btn::after {
+    content: '';
+    position: absolute;
+    inset: -4px 0;
+  }
 }
 .hashtag-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
 .hashtag-btn.active { background: var(--purple); border-color: var(--purple); color: white; }
@@ -725,8 +757,13 @@ body {
 }
 
 /* Size grid */
-.size-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.2rem; }
+.size-grid { display: flex; flex-wrap: wrap; gap: var(--tap-gap); margin-top: 0.2rem; }
 .size-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap);
+  min-height: var(--tap);
   background: var(--bg);
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -989,6 +1026,7 @@ body {
 .filter-toggle-btn {
   display: flex;
   align-items: center;
+  min-height: var(--tap);
   gap: 0.35rem;
   padding: 0.4rem 0.8rem;
   background: var(--surface);
@@ -1399,6 +1437,7 @@ body {
 .tipo-btn {
   flex: 1;
   min-width: 90px;
+  min-height: var(--tap);
   padding: 0.55rem 0.5rem;
   border: 1.5px solid var(--border);
   border-radius: 8px;
@@ -1568,6 +1607,17 @@ body {
 .match-card:hover .match-delete-btn { opacity: 1; }
 .match-delete-btn:hover { background: var(--red); }
 
+/* En táctil no hay hover: el botón quedaba invisible e inalcanzable.
+   Se muestra siempre y se le extiende el área a 44 sin agrandar la cruz. */
+@media (pointer: coarse) {
+  .match-delete-btn { opacity: 1; }
+  .match-delete-btn::after {
+    content: '';
+    position: absolute;
+    inset: -11px;
+  }
+}
+
 .match-avatar {
   width: 44px; height: 44px;
   border-radius: 50%;
@@ -1619,6 +1669,7 @@ body {
 
 .match-btn {
   flex: 1;
+  min-height: var(--tap);
   padding: 0.45rem 0;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -1807,10 +1858,10 @@ body {
 
 .sub-close {
   position: absolute;
-  top: 1rem; right: 1.25rem;
+  top: 0.75rem; right: 1rem;
   background: var(--bg);
   border: none;
-  width: 32px; height: 32px;
+  width: var(--tap); height: var(--tap);
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
@@ -1927,6 +1978,7 @@ body {
 
 .sub-plan-btn {
   width: 100%;
+  min-height: var(--tap);
   padding: 10px 24px;
   background: var(--plan-color);
   color: white;
@@ -2286,6 +2338,7 @@ body {
   gap: 0.45rem;
 }
 .fb-tipo-btn {
+  min-height: var(--tap);
   padding: 0.55rem 0.5rem;
   border: 1.5px solid var(--border);
   border-radius: 8px;

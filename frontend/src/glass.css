@@ -470,6 +470,17 @@ body {
 .chat-row:hover .chat-row-del { opacity: 1; }
 .chat-row-del:hover { background: rgba(214, 31, 83, 0.12); color: var(--rose-deep); }
 
+/* En táctil no hay hover: sin esto el botón nunca se ve en el celular.
+   position:relative para que el expansor de área se ancle al botón. */
+@media (pointer: coarse) {
+  .chat-row-del { opacity: 1; position: relative; }
+  .chat-row-del::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
+}
+
 /* ============================================================
    MATCHES · tarjetas en vidrio
    ============================================================ */
