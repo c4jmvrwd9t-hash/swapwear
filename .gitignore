@@ -4,3 +4,6 @@ frontend/dist/
 .env
 *.env
 .DS_Store
+
+# graphify: salida regenerable
+graphify-out/

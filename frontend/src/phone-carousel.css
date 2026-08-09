@@ -1,0 +1,244 @@
+/* ============================================================
+   SwapWear · PHONE CAROUSEL — mockups de iPhone en stack 3D
+   Scopeado bajo .pc. Paleta neo-vintage navy (ver liquid.css).
+   ============================================================ */
+.pc {
+  --pc-navy: #1B2A4A;
+  --pc-navy-2: #2A3F63;
+  --pc-w: 210px;
+  --pc-h: 430px;
+  --pc-bezel: 10px;
+  --pc-radius: 40px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  outline: none;
+}
+
+.pc:focus-visible {
+  outline: 2px solid var(--pc-navy);
+  outline-offset: 8px;
+  border-radius: 24px;
+}
+
+/* ── Escenario 3D ───────────────────────────────────────── */
+.pc-stage {
+  position: relative;
+  width: 100%;
+  height: calc(var(--pc-h) + 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+}
+
+.pc-slot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  cursor: pointer;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.45s ease;
+  /* La carta activa queda al frente y de cara; las laterales se van
+     hacia atrás, se encogen y giran sobre su eje Y. */
+  transform:
+    translate(-50%, -50%)
+    translateX(calc(var(--pc-offset) * 58%))
+    translateZ(calc(var(--pc-abs) * var(--pc-abs) * -170px))
+    rotateY(calc(var(--pc-offset) * -26deg))
+    scale(calc(1 - var(--pc-abs) * 0.14));
+}
+
+.pc-slot[data-active] { cursor: default; }
+
+/* ── Carcasa del teléfono ───────────────────────────────── */
+.pc-phone {
+  position: relative;
+  width: var(--pc-w);
+  height: var(--pc-h);
+}
+
+.pc-phone-body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: var(--pc-bezel);
+  border-radius: var(--pc-radius);
+  background: linear-gradient(160deg, #2E3A4F, #141B29 45%, #0D131E);
+  box-shadow:
+    0 2px 3px rgba(255, 255, 255, 0.22) inset,
+    0 -1px 3px rgba(255, 255, 255, 0.10) inset,
+    0 30px 60px -18px rgba(13, 19, 30, 0.55),
+    0 12px 24px -12px rgba(27, 42, 74, 0.40);
+  overflow: hidden;
+}
+
+.pc-slot[data-active] .pc-phone-body {
+  box-shadow:
+    0 2px 3px rgba(255, 255, 255, 0.28) inset,
+    0 -1px 3px rgba(255, 255, 255, 0.12) inset,
+    0 40px 80px -20px rgba(13, 19, 30, 0.62),
+    0 0 0 1px rgba(42, 63, 99, 0.30),
+    0 16px 40px -16px rgba(27, 42, 74, 0.55);
+}
+
+.pc-screen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: calc(var(--pc-radius) - var(--pc-bezel));
+  background: #0D131E;
+  display: block;
+  user-select: none;
+}
+
+/* Dynamic island */
+.pc-island {
+  position: absolute;
+  top: calc(var(--pc-bezel) + 9px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 62px;
+  height: 19px;
+  border-radius: 12px;
+  background: #06090F;
+  z-index: 2;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.pc-caption {
+  position: absolute;
+  left: var(--pc-bezel);
+  right: var(--pc-bezel);
+  bottom: var(--pc-bezel);
+  padding: 0.7rem 0.85rem;
+  border-radius: 0 0 calc(var(--pc-radius) - var(--pc-bezel))
+                   calc(var(--pc-radius) - var(--pc-bezel));
+  background: linear-gradient(to top, rgba(13, 19, 30, 0.88), transparent);
+  color: #F4F1EA;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  z-index: 2;
+}
+
+/* Botones físicos laterales */
+.pc-btn {
+  position: absolute;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #3A4657, #1E2735);
+}
+.pc-btn-power  { right: -2px; top: 108px; height: 62px; }
+.pc-btn-vol-up { left: -2px; top: 92px;  height: 38px; }
+.pc-btn-vol-dn { left: -2px; top: 138px; height: 38px; }
+
+/* ── Controles ──────────────────────────────────────────── */
+.pc-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pc-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(27, 42, 74, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--pc-navy);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.pc-arrow:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(27, 42, 74, 0.35);
+}
+.pc-arrow:active { transform: scale(0.93); }
+.pc-arrow:focus-visible {
+  outline: 2px solid var(--pc-navy);
+  outline-offset: 2px;
+}
+
+.pc-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pc-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 99px;
+  background: rgba(27, 42, 74, 0.25);
+  cursor: pointer;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease;
+}
+
+.pc-dot[data-on] {
+  width: 24px;
+  background: linear-gradient(135deg, var(--pc-navy-2), var(--pc-navy));
+}
+
+.pc-dot:focus-visible {
+  outline: 2px solid var(--pc-navy);
+  outline-offset: 3px;
+}
+
+/* Texto sólo para lectores de pantalla */
+.pc-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .pc {
+    --pc-w: 158px;
+    --pc-h: 324px;
+    --pc-bezel: 8px;
+    --pc-radius: 30px;
+  }
+  .pc-island { width: 48px; height: 15px; }
+  .pc-btn-power  { top: 82px; height: 46px; }
+  .pc-btn-vol-up { top: 70px; height: 28px; }
+  .pc-btn-vol-dn { top: 104px; height: 28px; }
+}
+
+/* Los botones táctiles mantienen 44×44 aunque el punto se vea pequeño */
+@media (pointer: coarse) {
+  .pc-dot { position: relative; }
+  .pc-dot::after {
+    content: '';
+    position: absolute;
+    inset: -18px -8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-slot,
+  .pc-dot,
+  .pc-arrow {
+    transition-duration: 0.01ms;
+  }
+}
