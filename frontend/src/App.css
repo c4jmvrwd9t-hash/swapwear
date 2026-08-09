@@ -579,12 +579,19 @@ body {
 
 .upload-grid {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  /* minmax(0,…) y no 1fr: el mínimo `auto` de una pista se resuelve al
+     min-content del contenido, y como .item-name/.item-desc son nowrap
+     ese min-content es el texto entero. La pista se negaba a encoger y
+     empujaba el layout más allá del viewport (borraba el botón de
+     eliminar fuera de pantalla en iPad vertical). */
+  grid-template-columns: 380px minmax(0, 1fr);
   gap: 1.25rem;
   padding: 0 1.25rem;
 }
-@media (max-width: 720px) {
-  .upload-grid { grid-template-columns: 1fr; }
+/* 860 y no 720: dos columnas necesitan 380 + gap + una lista usable.
+   Entre 721 y 805 el layout anterior no entraba y desbordaba. */
+@media (max-width: 860px) {
+  .upload-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .upload-form-card {
@@ -593,6 +600,7 @@ body {
   border-radius: 8px;
   padding: 1.25rem;
   height: fit-content;
+  min-width: 0;
 }
 .card-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 1.1rem; }
 
@@ -734,7 +742,9 @@ body {
 .size-btn:hover:not(.selected) { border-color: var(--purple); }
 
 /* Items list */
-.items-list { display: flex; flex-direction: column; gap: 0.85rem; padding-top: 0.2rem; }
+/* min-width:0 — un ítem de grid también arranca en min-width:auto, así que
+   sin esto la lista vuelve a desbordar su propia pista. */
+.items-list { display: flex; flex-direction: column; gap: 0.85rem; padding-top: 0.2rem; min-width: 0; }
 
 .item-card {
   display: flex;
