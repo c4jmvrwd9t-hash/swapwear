@@ -52,11 +52,11 @@ export default function ProfileEditPage({ user, firebaseUser, onClose, onSaved }
 
   return (
     <div className="sub-overlay" onClick={onClose}>
-      <div className="sub-sheet profile-edit-sheet" onClick={e => e.stopPropagation()}>
+      <div role="dialog" aria-modal="true" aria-labelledby="pe-title" className="sub-sheet profile-edit-sheet" onClick={e => e.stopPropagation()}>
         <button className="sub-close" onClick={onClose} aria-label="Cerrar"><Icon.X size={18} /></button>
 
         <p className="sub-eyebrow">Tu cuenta</p>
-        <h2 className="sub-title" style={{ marginBottom: '1.5rem' }}>Editar perfil</h2>
+        <h2 className="sub-title" id="pe-title" style={{ marginBottom: '1.5rem' }}>Editar perfil</h2>
 
         {/* Avatar */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>

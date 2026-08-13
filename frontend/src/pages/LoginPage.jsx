@@ -131,7 +131,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="lx">
+    <main className="lx">
       {/* Fondo de auroras animadas */}
       <div className="lx-aurora" aria-hidden="true">
         <span className="lx-blob b1" />
@@ -314,6 +314,6 @@ export default function LoginPage() {
           </div>
         </section>
       </div>
-    </div>
+    </main>
   );
 }

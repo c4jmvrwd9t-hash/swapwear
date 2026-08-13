@@ -1,0 +1,12 @@
+const fakeUser = { uid:'bot_roma', email:'roma@swapwear.test', displayName:'roma_vintage', photoURL:null };
+export const getAuth = () => ({ currentUser: fakeUser });
+export const GoogleAuthProvider = class {};
+export const browserLocalPersistence = 'local';
+export const setPersistence = async () => {};
+export const onAuthStateChanged = (_a, cb) => { setTimeout(()=>cb(window.__AUDIT_LOGGED_OUT__?null:fakeUser),0); return ()=>{}; };
+export const signOut = async () => {};
+export const signInWithPopup = async () => ({ user: fakeUser });
+export const signInWithEmailAndPassword = async () => ({ user: fakeUser });
+export const createUserWithEmailAndPassword = async () => ({ user: fakeUser });
+export const sendPasswordResetEmail = async () => {};
+export const updateProfile = async () => {};

@@ -32,11 +32,11 @@ export default function SubscriptionPage({ user, onClose }) {
 
   return (
     <div className="sub-overlay" onClick={onClose}>
-      <div className="sub-sheet" onClick={e => e.stopPropagation()}>
+      <div className="sub-sheet" onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="sub-title">
         <button className="sub-close" onClick={onClose} aria-label="Cerrar"><Icon.X size={18} /></button>
 
         <p className="sub-eyebrow">SwapWear</p>
-        <h2 className="sub-title">Elegí tu plan</h2>
+        <h2 className="sub-title" id="sub-title">Elegí tu plan</h2>
 
         <div className="sub-plans">
           {PLANS.map(plan => {

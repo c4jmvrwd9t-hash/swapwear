@@ -180,7 +180,7 @@ export default function MatchesPage({ user, onNavigate }) {
   return (
     <div className="matches-page">
       <div className="page-header">
-        <h2 className="page-title">Matches</h2>
+        <h1 className="page-title">Matches</h1>
         <p className="page-subtitle">
           {matches.length === 0
             ? 'Todavía nadie guardó tu ropa'

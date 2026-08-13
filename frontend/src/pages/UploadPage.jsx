@@ -197,7 +197,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
       {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
       {successMsg && <div className="upload-success-toast"><Icon.Check size={16} /> {successMsg}</div>}
       <div className="page-header">
-        <h2 className="page-title">Mis Prendas</h2>
+        <h1 className="page-title">Mis Prendas</h1>
         <p className="page-subtitle">
           {unlimited ? `${items.length} prendas · ilimitadas` : `${items.length}/${itemLimit} prendas`}
         </p>
@@ -206,7 +206,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
       <div className="upload-grid">
         {canUpload && (
           <div className="upload-form-card">
-            <h3 className="card-title">Agregar prenda</h3>
+            <h2 className="card-title">Agregar prenda</h2>
             <form onSubmit={handleUpload}>
 
               {/* Photos */}
@@ -396,7 +396,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
                     {photos.length > 1 && <span className="item-photo-count"><Icon.Camera size={12} /> {photos.length}</span>}
                   </div>
                   <div className="item-info">
-                    <h4 className="item-name">{item.name || 'Sin nombre'}</h4>
+                    <h3 className="item-name">{item.name || 'Sin nombre'}</h3>
                     <div className="item-tags-row">
                       {gLabel && <span className="item-tag"><GI name={gLabel.key} size={14} /> {gLabel.label}</span>}
                       {item.cut && <span className="item-tag">{item.cut}</span>}

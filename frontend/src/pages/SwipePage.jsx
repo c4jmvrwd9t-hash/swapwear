@@ -131,7 +131,7 @@ export default function SwipePage({ user }) {
 
   // ── Contenido de filtros (rail en desktop · panel toggle en mobile) ──
   const filtersBlock = (
-    <aside className={`ex-rail ex-filters ${showFilters ? 'open' : ''}`}>
+    <aside className={`ex-rail ex-filters ${showFilters ? 'open' : ''}`} aria-label="Filtros de búsqueda">
       <p className="ex-rail-title">Tipo de prenda</p>
       <div className="filter-garment-grid">
         {GARMENTS.map(g => (
@@ -204,6 +204,7 @@ export default function SwipePage({ user }) {
 
       {/* ── Columna central: descubrir ── */}
       <section className="ex-center">
+        <h1 className="sr-only">Explorar prendas</h1>
         <div className="swipe-top-bar">
           <div className="swipe-progress-wrap">
             <div className="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax={unlimited ? undefined : dailyLimit} aria-valuenow={unlimited ? undefined : todayCount} aria-label="Swaps usados hoy">
@@ -279,7 +280,7 @@ export default function SwipePage({ user }) {
       </section>
 
       {/* ── Columna derecha (desktop): actividad ── */}
-      <aside className="ex-rail ex-activity ex-desktop-only">
+      <aside className="ex-rail ex-activity ex-desktop-only" aria-label="Tu actividad de hoy">
         <p className="ex-rail-title">Tu actividad de hoy</p>
         <div className="ex-stat-grid">
           <div className="ex-stat"><span className="ex-stat-num">{likeCount}</span><span className="ex-stat-lbl">Me gusta</span></div>

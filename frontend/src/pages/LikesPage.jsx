@@ -58,7 +58,7 @@ export default function LikesPage({ user, onNavigate }) {
   return (
     <div className="matches-page">
       <div className="page-header">
-        <h2 className="page-title">Chats</h2>
+        <h1 className="page-title">Chats</h1>
         <p className="page-subtitle">
           {convos.length === 0
             ? 'Todavía no guardaste ninguna prenda'
@@ -76,8 +76,17 @@ export default function LikesPage({ user, onNavigate }) {
       ) : (
         <div className="chat-list">
           {convos.map(convo => (
-            <div key={convo.user.id} className={`chat-row ${convo.unread > 0 ? 'is-unread' : ''}`} onClick={() => openChat(convo)} role="button" tabIndex={0}
-              onKeyDown={e => { if (e.key === 'Enter') openChat(convo); }}>
+            <div key={convo.user.id} className={`chat-row ${convo.unread > 0 ? 'is-unread' : ''}`}>
+              {/* Botón extendido en vez de role="button" en la fila: antes el
+                  botón de eliminar quedaba anidado dentro de otro control, que
+                  axe marca como nested-interactive y confunde a teclado y
+                  lector de pantalla. Ahora son hermanos. */}
+              <button
+                type="button"
+                className="chat-row-open"
+                onClick={() => openChat(convo)}
+                aria-label={`Abrir conversación con @${convo.user.username}`}
+              />
               <div className="chat-row-avatar">
                 {convo.user.avatar
                   ? <img src={convo.user.avatar} alt="" />

@@ -503,6 +503,23 @@ body {
   position: relative;
 }
 .chat-row:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+/* Botón extendido: cubre toda la fila por debajo del contenido, de modo que
+   el click en cualquier parte abre el chat sin anidar controles. El botón de
+   eliminar se eleva por encima para conservar su propia área. */
+.chat-row-open {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 0;
+  border-radius: inherit;
+}
+.chat-row > *:not(.chat-row-open) { position: relative; z-index: 1; pointer-events: none; }
+.chat-row > .chat-row-del { pointer-events: auto; }
 .chat-row-avatar {
   width: 50px; height: 50px; flex-shrink: 0; border-radius: 50%;
   display: grid; place-items: center; overflow: hidden;

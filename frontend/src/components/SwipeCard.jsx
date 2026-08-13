@@ -142,7 +142,7 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex }) {
       <div className="card-body">
         <div className="card-meta">
           <div>
-            <h3 className="card-item-name">{item.name || 'Prenda'}</h3>
+            <h2 className="card-item-name">{item.name || 'Prenda'}</h2>
             <p className="card-username">@{item.username}</p>
             {item.seller_rating && <Stars avg={item.seller_rating.avg} count={item.seller_rating.count} />}
           </div>
