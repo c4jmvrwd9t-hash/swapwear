@@ -6,7 +6,7 @@
 :root {
   --ink: #1d1d1f;
   --ink-2: #515154;
-  --ink-3: #6e6e73;
+  --ink-3: #555559;   /* era #6e6e73 → 3.11:1 sobre el vidrio; ahora 4.56:1 */
   --rose: #ff5d7e;
   --rose-deep: #d61f53;
   --lilac: #7d6cff;

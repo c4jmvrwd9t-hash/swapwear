@@ -5,7 +5,7 @@
 .lx {
   --ink: #1d1d1f;
   --ink-2: #515154;
-  --ink-3: #6e6e73;
+  --ink-3: #555559;   /* ídem glass.css: contraste AA sobre el fondo claro */
   --rose: #1B2A4A;
   --rose-deep: #1B2A4A;
   --lilac: #1B2A4A;

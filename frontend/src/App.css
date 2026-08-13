@@ -7,13 +7,18 @@
   --green: #1DA462;
   --purple: #6C63FF;
   --purple-light: #f0eeff;
+  /* El morado de marca sobre --purple-light da 3.78:1. Sólo para texto;
+     como relleno --purple sigue igual. */
+  --purple-text: #5B51FF;
   --gold: #F59E0B;
   --gold-light: #fffbeb;
   --bg: #F7F8FC;
   --surface: #FFFFFF;
   --border: #E6EBF1;
   --text: #1A1A2E;
-  --muted: #8890A4;
+  /* #8890A4 daba 2.15:1 sobre las superficies claras (mín. WCAG AA 4.5).
+     Mismo tono, sólo más oscuro: 4.51:1 en el peor fondo medido. */
+  --muted: #545C6E;
   --radius: 8px;
   --radius-sm: 8px;
   --radius-xs: 8px;
@@ -700,7 +705,7 @@ body {
     inset: -4px 0;
   }
 }
-.hashtag-btn:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.hashtag-btn:hover { border-color: var(--purple); color: var(--purple-text); background: var(--purple-light); }
 .hashtag-btn.active { background: var(--purple); border-color: var(--purple); color: white; }
 
 /* Garment type grid */
@@ -837,7 +842,7 @@ body {
 .item-size {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--purple);
+  color: var(--purple-text);
   background: var(--purple-light);
   padding: 0.15rem 0.45rem;
   border-radius: 9999px;
@@ -914,7 +919,7 @@ body {
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
-.preview-add:hover { border-color: var(--purple); color: var(--purple); }
+.preview-add:hover { border-color: var(--purple); color: var(--purple-text); }
 
 /* Card chips */
 .card-chips { display: flex; gap: 0.35rem; margin-top: 0.35rem; flex-wrap: wrap; }
@@ -1070,7 +1075,7 @@ body {
   flex-shrink: 0;
 }
 .filter-toggle-btn:hover { border-color: var(--purple); }
-.filter-toggle-btn.has-filters { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.filter-toggle-btn.has-filters { border-color: var(--purple); color: var(--purple-text); background: var(--purple-light); }
 
 .filter-count {
   background: var(--purple);
@@ -1132,7 +1137,7 @@ body {
   transition: all 0.15s;
 }
 .filter-garment-btn span:first-child { font-size: 1.1rem; }
-.filter-garment-btn:hover { border-color: var(--purple); color: var(--purple); }
+.filter-garment-btn:hover { border-color: var(--purple); color: var(--purple-text); }
 .filter-garment-btn.selected { background: var(--purple); border-color: var(--purple); color: white; }
 
 .filter-actions { display: flex; gap: 0.6rem; justify-content: flex-end; padding-top: 0.2rem; }
@@ -1150,7 +1155,7 @@ body {
   gap: 0.25rem;
   background: var(--purple-light);
   border: 1.5px solid var(--purple);
-  color: var(--purple);
+  color: var(--purple-text);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.2rem 0.6rem;
@@ -1265,7 +1270,7 @@ body {
 .card-username { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
 .card-size-badge {
   background: var(--purple-light);
-  color: var(--purple);
+  color: var(--purple-text);
   font-size: 0.72rem;
   font-weight: 700;
   padding: 0.25rem 0.55rem;
@@ -1433,8 +1438,10 @@ body {
   font-size: 0.78rem;
 }
 .stars-row { display: inline-flex; gap: 1px; }
-.star-on  { color: #f59e0b; }
-.star-off { color: var(--border); }
+/* Las estrellas comunican la reputación del usuario, así que cumplen como
+   contenido informativo: #f59e0b daba 1.77:1 y --border 1.09:1. Mismo tono. */
+.star-on  { color: #8b5a06; }
+.star-off { color: #808084; }
 .stars-avg  { font-weight: 700; color: var(--text); }
 .stars-count { color: var(--muted); }
 .stars-none { font-size: 0.72rem; color: var(--muted); }
