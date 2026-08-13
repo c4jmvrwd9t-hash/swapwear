@@ -6,7 +6,7 @@
       "username": "marti_styles",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.661Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -15,7 +15,7 @@
       "username": "nacho_vintage",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -24,7 +24,7 @@
       "username": "caro_fashion",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -33,7 +33,7 @@
       "username": "luci_closet",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -42,7 +42,7 @@
       "username": "fede_swap",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -51,7 +51,7 @@
       "username": "vale_outfits",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -60,7 +60,7 @@
       "username": "sofi_thrift",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -69,7 +69,7 @@
       "username": "juli_y2k",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -78,7 +78,7 @@
       "username": "nico_street",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -87,7 +87,7 @@
       "username": "pau_denim",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -96,7 +96,7 @@
       "username": "mati_baggy",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -105,7 +105,7 @@
       "username": "roma_vintage",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -114,7 +114,7 @@
       "username": "tomi_drops",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -123,7 +123,7 @@
       "username": "flor_aesthetic",
       "promo": true,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     },
     {
@@ -132,7 +132,7 @@
       "username": "gonza_skate",
       "promo": false,
       "created_at": "2026-06-11T15:23:18.668Z",
-      "account_type": "user",
+      "account_type": "person",
       "tier": "free"
     }
   ],
