@@ -13,10 +13,15 @@ create table if not exists users (
   username      text        not null,
   -- server.js:327 sólo acepta estos dos valores
   account_type  text        check (account_type in ('person', 'store')),
-  tier          text        not null default 'free' check (tier in ('free', 'basic', 'pro')),
+  -- NULL es válido: /api/subscribe pone tier = null para cancelar, y
+  -- getDailyLimit() trata cualquier cosa que no sea pro/basic como free.
+  tier          text        check (tier is null or tier in ('free', 'basic', 'pro')),
   promo         boolean     not null default false,
   bio           text        check (char_length(bio) <= 120),
+  goal          text        check (goal is null or goal in ('intercambio', 'venta', 'ambos')),
   avatar        text,
+  subscribed    boolean     not null default false,
+  subscribed_at timestamptz,
   created_at    timestamptz not null default now()
 );
 
@@ -53,6 +58,9 @@ create table if not exists messages (
   sender_id    bigint      not null references users(id) on delete cascade,
   receiver_id  bigint      not null references users(id) on delete cascade,
   text         text        not null,
+  -- los mensajes de sistema ("fulano eliminó esta conversación") sólo los
+  -- ve el receptor; server.js los filtra por esta bandera
+  system       boolean     not null default false,
   created_at   timestamptz not null default now(),
   check (sender_id <> receiver_id)
 );
@@ -64,6 +72,7 @@ create table if not exists ratings (
   stars       smallint    not null check (stars between 1 and 5),
   comment     text,
   created_at  timestamptz not null default now(),
+  updated_at  timestamptz,
   -- una calificación por par; /api/rate hace upsert sobre esto
   unique (rater_id, rated_id),
   check (rater_id <> rated_id)
@@ -79,6 +88,17 @@ create table if not exists feedback (
   created_at  timestamptz not null default now()
 );
 
+-- Conversaciones ocultadas: al borrar un chat sólo se oculta para quien lo
+-- borró. No existía en db.json porque nadie la usó todavía, pero server.js
+-- la lee en /api/likes, /api/matches y /api/conversation.
+create table if not exists hidden_convos (
+  by_user_id    bigint not null references users(id) on delete cascade,
+  other_user_id bigint not null references users(id) on delete cascade,
+  created_at    timestamptz not null default now(),
+  primary key (by_user_id, other_user_id),
+  check (by_user_id <> other_user_id)
+);
+
 -- Índices para las consultas que ya hace server.js
 create index if not exists items_user_id_idx       on items(user_id);
 create index if not exists items_created_at_idx    on items(created_at desc);
@@ -90,3 +110,4 @@ create index if not exists swipes_user_created_idx on swipes(user_id, created_at
 create index if not exists messages_pair_idx       on messages(sender_id, receiver_id, created_at desc);
 create index if not exists messages_receiver_idx   on messages(receiver_id, created_at desc);
 create index if not exists ratings_rated_id_idx    on ratings(rated_id);
+create index if not exists messages_system_idx     on messages(receiver_id) where system;
