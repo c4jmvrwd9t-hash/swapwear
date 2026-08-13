@@ -297,7 +297,10 @@ async function seed() {
   // Users
   for (const bot of BOTS) {
     if (db.users.find(u => u.firebase_uid === bot.uid)) continue;
-    db.users.push({ id: nextId(db.users), firebase_uid: bot.uid, username: bot.username, promo: bot.promo, created_at: new Date().toISOString() });
+    // account_type y tier son obligatorios: App.jsx manda a onboarding a
+    // cualquier usuario sin account_type, así que sin esto los 15 bots
+    // quedaban atrapados en esa pantalla y no se podía entrar con ellos.
+    db.users.push({ id: nextId(db.users), firebase_uid: bot.uid, username: bot.username, promo: bot.promo, account_type: 'user', tier: 'free', created_at: new Date().toISOString() });
     console.log(`✓ Usuario: ${bot.username}`);
   }
   writeDb(db);
