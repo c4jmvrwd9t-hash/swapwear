@@ -252,8 +252,10 @@ export default function UploadPage({ user, items, onItemsChange }) {
 
                 {/* Garment type */}
                 <div className="input-group">
-                  <label className="input-label">Tipo de prenda <span className="label-required">*</span></label>
-                  <div className="garment-grid">
+                  <label className="input-label" id="lbl-garment">Tipo de prenda <span className="label-required">*</span></label>
+                  <div className="garment-grid" role="group" aria-labelledby="lbl-garment"
+                    aria-invalid={error.includes('tipo de prenda') || undefined}
+                    aria-describedby={error.includes('tipo de prenda') ? 'upload-error' : undefined}>
                     {GARMENTS.map(g => (
                       <button key={g.key} type="button"
                         className={`garment-btn ${form.garment_type === g.key ? 'selected' : ''}`}
@@ -284,8 +286,10 @@ export default function UploadPage({ user, items, onItemsChange }) {
 
                 {/* Size */}
                 <div className="input-group">
-                  <label className="input-label">Talle <span className="label-required">*</span></label>
-                  <div className="size-grid">
+                  <label className="input-label" id="lbl-size">Talle <span className="label-required">*</span></label>
+                  <div className="size-grid" role="group" aria-labelledby="lbl-size"
+                    aria-invalid={error.includes('talle') || undefined}
+                    aria-describedby={error.includes('talle') ? 'upload-error' : undefined}>
                     {SIZES.map(s => (
                       <button key={s} type="button"
                         className={`size-btn ${form.size === s ? 'selected' : ''}`}
@@ -371,7 +375,7 @@ export default function UploadPage({ user, items, onItemsChange }) {
                 </div>
               </div>
 
-              {error && <p className="form-error">{error}</p>}
+              {error && <p className="form-error" id="upload-error" role="alert">{error}</p>}
               <button className="btn-primary btn-full" type="submit" disabled={loading || !files.length}>
                 {loading ? <span className="spinner-sm" /> : `Publicar prenda${files.length > 1 ? ` (${files.length} fotos)` : ''}`}
               </button>

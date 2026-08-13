@@ -143,11 +143,13 @@ export default function FeedbackPage({ user }) {
                 onChange={e => setMensaje(e.target.value)}
                 placeholder="Contanos tu idea, qué mejorarías, o qué no funciona bien..."
                 maxLength={1000}
+                aria-invalid={error ? true : undefined}
+                aria-describedby={error ? 'fb-error' : undefined}
               />
               <span className="fb-char-count">{mensaje.length}/1000</span>
             </div>
 
-            {error && <p className="form-error" style={{ marginBottom: '0.5rem' }}>{error}</p>}
+            {error && <p className="form-error" id="fb-error" role="alert" style={{ marginBottom: '0.5rem' }}>{error}</p>}
 
             <button
               className="btn-primary btn-full"
