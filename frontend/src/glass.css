@@ -302,7 +302,15 @@ body {
     grid-template-columns: 264px minmax(0, 1fr) 264px;
     align-items: stretch;
     gap: 1.4rem;
-    height: calc(100dvh - var(--header-h) - 2rem);
+    /* La bottom nav es fixed y ocupa --nav-h del borde inferior; la fórmula
+       anterior no la descontaba. Entraba de casualidad hasta que los targets
+       táctiles de 44px crecieron el rail de filtros, que al ser el ítem más
+       alto de la grilla arrastró la fila y dejó las acciones bajo la nav.
+       flex:0 0 auto es imprescindible: .swipe-page hereda flex:1 dentro de
+       .tab-panel (columna), y flex-basis:0 hacía que este height se ignorara. */
+    flex: 0 0 auto;
+    min-height: 0;
+    height: calc(100dvh - var(--header-h) - var(--nav-h) - 1.5rem);
     padding: 1rem 1.5rem;
   }
   .ex-rail {
@@ -326,8 +334,62 @@ body {
   .ex-center .swipe-top-bar .filter-toggle-btn { display: none; }
   .ex-mobile-only { display: none !important; }
 }
-@media (max-width: 979px) {
+/* 720 y no 979: desde 721 ya entra el rail de actividad al lado de la carta
+   (ver el bloque de tablet de abajo). Sólo lo usa .ex-activity. */
+@media (max-width: 720px) {
   .ex-desktop-only { display: none !important; }
+}
+
+/* ============================================================
+   TABLET · 721–979px
+   Antes era el layout de celular estirado: la carta quedaba en 448px
+   dentro de 768 y el resto era vacío. Dos columnas — carta + actividad —
+   sin el rail de filtros, que sigue viviendo en el botón "Filtrar".
+   ============================================================ */
+@media (min-width: 721px) and (max-width: 979px) {
+  .swipe-page.ex {
+    max-width: 780px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 232px;
+    /* stretch + altura explícita, igual que el bloque de ≥980: .ex-center es
+       un flex column y su carta usa flex:1, así que sin altura definida
+       colapsa a cero y la prenda no se ve. */
+    align-items: stretch;
+    /* descuenta --nav-h (la nav fixed se come el borde inferior) y fija
+       flex:0 0 auto para que el height no lo anule el flex:1 heredado. */
+    flex: 0 0 auto;
+    min-height: 0;
+    height: calc(100dvh - var(--header-h) - var(--nav-h) - 1.5rem);
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+  }
+  .ex-rail.ex-activity {
+    display: flex;
+    flex-direction: column;
+    /* el rail no se estira: se ancla arriba y acompaña el scroll */
+    align-self: start;
+    gap: 0.9rem;
+    padding: 1rem;
+    background: var(--glass);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    border: 1px solid var(--glass-brd);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0.75rem;
+  }
+  .ex-rail-title {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  /* El rail de filtros sigue oculto: a este ancho no entran tres columnas. */
+  .ex-rail.ex-filters:not(.open) { display: none; }
+
+  /* Chats y Matches ya venían centrados a 640; a este ancho sobra sitio
+     para respirar un poco sin pasarse de largo de línea cómodo. */
+  .matches-page { max-width: 720px; }
+  .feedback-page { max-width: 660px; }
 }
 
 /* Botones base en el tema glass */
