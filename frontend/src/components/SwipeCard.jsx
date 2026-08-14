@@ -1,10 +1,13 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Stars } from './Stars.jsx';
 
 const THRESHOLD = 90;
 
-export default function SwipeCard({ item, onSwipe, isTop, stackIndex }) {
+export default function SwipeCard({ item, onSwipe, isTop, stackIndex, enterFrom = null }) {
   const [delta, setDelta] = useState(0);
+  // Reingreso por rewind: arranca fuera de pantalla del lado por el que salió
+  // y en el siguiente frame se suelta a su posición, así la transición corre.
+  const [entering, setEntering] = useState(enterFrom);
   const [dragging, setDragging] = useState(false);
   const [leaving, setLeaving] = useState(null);
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -14,6 +17,13 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex }) {
   const tapStartX = useRef(0);
 
   const photos = item.image_paths?.length ? item.image_paths : [item.image_path];
+
+  useEffect(() => {
+    if (!enterFrom) return;
+    setEntering(enterFrom);
+    const id = requestAnimationFrame(() => requestAnimationFrame(() => setEntering(null)));
+    return () => cancelAnimationFrame(id);
+  }, [enterFrom, item.id]);
 
   const onStart = useCallback((clientX, clientY) => {
     if (!isTop) return;
@@ -72,12 +82,22 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex }) {
     touchAction: 'none',
   };
 
-  if (leaving) {
+  if (entering) {
+    // misma geometría que la salida, pero al revés
+    const off = entering === 'right' ? '120vw' : entering === 'left' ? '-120vw' : '0';
+    const rot = entering === 'right' ? 25 : entering === 'left' ? -25 : 0;
+    cardStyle.transform = entering === 'up'
+      ? 'translateY(-110vh) rotate(0deg)'
+      : `translateX(${off}) rotate(${rot}deg)`;
+    cardStyle.opacity = 0;
+    cardStyle.transition = 'none';
+  } else if (leaving) {
     cardStyle.transform = `translateX(${leaving === 'right' ? '120vw' : '-120vw'}) rotate(${leaving === 'right' ? 25 : -25}deg)`;
     cardStyle.opacity = 0;
     cardStyle.transition = 'transform 0.28s ease, opacity 0.28s ease';
   } else if (isTop) {
     cardStyle.transform = `translateX(${delta}px) rotate(${rotation}deg)`;
+    if (enterFrom && !dragging) cardStyle.transition = 'transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.42s ease';
   } else {
     const scale = 1 - stackIndex * 0.04;
     cardStyle.transform = `scale(${scale}) translateY(${stackIndex * 12}px)`;

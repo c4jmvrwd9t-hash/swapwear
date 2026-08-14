@@ -7,7 +7,7 @@ const PLANS = [
     price:   1,
     color:   '#6366f1',
     Badge:   Icon.Star,
-    perks:   ['100 swaps por día', '10 prendas publicadas', 'Sin anuncios'],
+    perks:   ['100 swaps por día', '10 prendas publicadas', 'Volver a la prenda anterior', 'Sin anuncios'],
     cta:     'Suscribirse por $1 / mes',
   },
   {
@@ -16,13 +16,13 @@ const PLANS = [
     price:   5,
     color:   '#d61f53',
     Badge:   Icon.Sparkles,
-    perks:   ['Swaps ilimitados', 'Prendas ilimitadas', 'Sin anuncios', 'Aparecés primero en el feed', 'Badge Pro en tu perfil'],
+    perks:   ['Swaps ilimitados', 'Prendas ilimitadas', 'Volver a la prenda anterior', 'Sin anuncios', 'Aparecés primero en el feed', 'Badge Pro en tu perfil'],
     cta:     'Suscribirse por $5 / mes',
     highlight: true,
   },
 ];
 
-export default function SubscriptionPage({ user, onClose }) {
+export default function SubscriptionPage({ user, onClose, reason = null }) {
   const currentTier = user?.tier || null;
 
   const handleSelect = (tier) => {
@@ -37,6 +37,7 @@ export default function SubscriptionPage({ user, onClose }) {
 
         <p className="sub-eyebrow">SwapWear</p>
         <h2 className="sub-title" id="sub-title">Elegí tu plan</h2>
+        {reason && <p className="sub-reason">{reason}</p>}
 
         <div className="sub-plans">
           {PLANS.map(plan => {
@@ -79,6 +80,7 @@ export default function SubscriptionPage({ user, onClose }) {
         <ul className="sub-free-list">
           <li>{user?.promo ? '40' : '35'} swaps por día{user?.promo ? ' (miembro fundador)' : ''}</li>
           <li>Hasta 5 prendas publicadas</li>
+          <li className="sub-free-no">Sin volver a la prenda anterior</li>
         </ul>
       </div>
     </div>

@@ -33,15 +33,27 @@ function GI({ name, size = 22 }) {
 
 export default function SwipePage({ user }) {
   const unlimited  = user.daily_limit === null;
+  // OJO: `unlimited` es true sólo para Pro (daily_limit === null). Basic paga y
+  // tiene límite 100, así que usarlo como gate dejaría afuera a un suscriptor.
+  const isPlus = ['basic', 'pro'].includes(user.tier);
   const dailyLimit = unlimited ? Infinity : (user.daily_limit || 35);
   const [showSub, setShowSub] = useState(false);
+  // Motivo por el que se abrió el paywall, para que el modal lo explique.
+  const [subReason, setSubReason] = useState(null);
+  const openSub = (reason = null) => { setSubReason(reason); setShowSub(true); };
+  const closeSub = () => { setShowSub(false); setSubReason(null); };
 
   const [feed, setFeed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [todayCount, setTodayCount] = useState(0);
   const [likeCount, setLikeCount] = useState(0);
   const [lastAction, setLastAction] = useState(null);
-  const [lastRemoved, setLastRemoved] = useState(null); // para Deshacer
+  // Pila de swipes deshacibles (rewind ilimitado para SwapWear+). Antes era
+  // una sola prenda; ahora se apila para poder volver varias veces.
+  const [history, setHistory] = useState([]);
+  const [rewound, setRewound] = useState(null); // { id, dir } de la carta que reingresa
+  const [spinning, setSpinning] = useState(false);
+  const [notice, setNotice] = useState('');
   const [empty, setEmpty] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({ garment_type: '', tags: [] });
@@ -98,7 +110,9 @@ export default function SwipePage({ user }) {
   const handleSwipe = useCallback(async (itemId, liked, isSuper = false) => {
     const item = feed.find(i => i.id === itemId);
     setLastAction({ liked, isSuper, name: item?.name || 'Prenda' });
-    if (item) setLastRemoved({ item, liked });
+    // izquierda = nope · arriba = super · derecha = like
+    const dir = isSuper ? 'up' : liked ? 'right' : 'left';
+    if (item) setHistory(h => [...h, { item, liked, isSuper, dir }]);
 
     const res = await fetch('/api/swipe', {
       method: 'POST',
@@ -114,14 +128,48 @@ export default function SwipePage({ user }) {
     setTimeout(() => setLastAction(null), 1100);
   }, [feed, user.id]);
 
-  // Deshacer (cliente): reinserta la última carta al frente del feed
-  const handleUndo = () => {
-    if (!lastRemoved) return;
-    setFeed(prev => [lastRemoved.item, ...prev.filter(i => i.id !== lastRemoved.item.id)]);
+  // La flecha gira siempre que se toca, haya o no prenda que recuperar.
+  const spinArrow = () => {
+    setSpinning(true);
+    setTimeout(() => setSpinning(false), 520);
+  };
+
+  const handleUndo = async () => {
+    // Exclusivo de SwapWear+: al usuario free se le abre el paywall.
+    if (!isPlus) {
+      openSub('Volver a la prenda anterior es parte de SwapWear+.');
+      return;
+    }
+
+    spinArrow();
+
+    if (history.length === 0) {
+      setNotice('No hay prenda anterior');
+      setTimeout(() => setNotice(''), 1800);
+      return;
+    }
+
+    const last = history[history.length - 1];
+    setHistory(h => h.slice(0, -1));
+
+    // Reinserta al frente marcando por dónde debe reingresar
+    setFeed(prev => [last.item, ...prev.filter(i => i.id !== last.item.id)]);
+    setRewound({ id: last.item.id, dir: last.dir });
     setTodayCount(c => Math.max(0, c - 1));
-    if (lastRemoved.liked) setLikeCount(c => Math.max(0, c - 1));
+    if (last.liked) setLikeCount(c => Math.max(0, c - 1));
     setEmpty(false);
-    setLastRemoved(null);
+
+    // Borra el swipe en el servidor: sin esto la prenda no vuelve al recargar
+    // y el cupo diario seguiría consumido.
+    try {
+      await fetch('/api/swipe', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, item_id: last.item.id }),
+      });
+    } catch {
+      // El rewind local ya ocurrió; un fallo de red no debe revertir la UI.
+    }
   };
 
   const activeFilterCount = (filters.garment_type ? 1 : 0) + filters.tags.length;
@@ -171,7 +219,7 @@ export default function SwipePage({ user }) {
   if (!unlimited && todayCount >= dailyLimit) {
     return (
       <div className="swipe-page ex">
-        {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
+        {showSub && <SubscriptionPage user={user} reason={subReason} onClose={closeSub} />}
         <div className="end-state">
           <div className="end-icon-wrap"><Icon.Check size={40} /></div>
           <h2>Llegaste a tu límite de hoy</h2>
@@ -187,7 +235,7 @@ export default function SwipePage({ user }) {
             </div>
           </div>
           {user.promo && <p className="promo-badge-sm">Miembro fundador · {dailyLimit} swaps/día</p>}
-          <button className="sub-inline-btn" onClick={() => setShowSub(true)}>
+          <button className="sub-inline-btn" onClick={() => openSub()}>
             <Icon.Sparkles size={18} /> Swaps ilimitados con SwapWear+
           </button>
         </div>
@@ -197,7 +245,7 @@ export default function SwipePage({ user }) {
 
   return (
     <div className="swipe-page ex">
-      {showSub && <SubscriptionPage user={user} onClose={() => setShowSub(false)} />}
+      {showSub && <SubscriptionPage user={user} reason={subReason} onClose={closeSub} />}
 
       {/* ── Columna izquierda (desktop) / panel toggle (mobile) ── */}
       {filtersBlock}
@@ -237,6 +285,11 @@ export default function SwipePage({ user }) {
           </div>
         )}
 
+        {/* Aviso corto del rewind */}
+        {notice && (
+          <div className="action-toast toast-pass" role="status" aria-live="polite">{notice}</div>
+        )}
+
         {/* Toast */}
         {lastAction && (
           <div className={`action-toast ${lastAction.liked ? 'toast-like' : 'toast-pass'}`} role="status" aria-live="polite">
@@ -257,23 +310,42 @@ export default function SwipePage({ user }) {
           <>
             <div className="card-stack">
               {feed.slice(0, 4).map((item, index) => (
-                <SwipeCard key={item.id} item={item} onSwipe={handleSwipe} isTop={index === 0} stackIndex={index} />
+                <SwipeCard
+                  key={item.id}
+                  item={item}
+                  onSwipe={handleSwipe}
+                  isTop={index === 0}
+                  stackIndex={index}
+                  enterFrom={rewound?.id === item.id ? rewound.dir : null}
+                />
               ))}
             </div>
 
+            {/* El trío va absoluto y centrado sobre la barra, así el rewind de
+                la izquierda no lo descentra (esté visible o no). */}
             <div className="swipe-actions">
-              <button className="action-btn act-undo" onClick={handleUndo} disabled={!lastRemoved} aria-label="Deshacer">
+              <button
+                className={`action-btn act-undo ${!isPlus ? 'is-locked' : ''} ${spinning ? 'is-spinning' : ''}`}
+                onClick={handleUndo}
+                aria-label={isPlus ? 'Volver a la prenda anterior' : 'Volver a la prenda anterior (exclusivo de SwapWear+)'}
+              >
                 <Icon.Undo />
+                {!isPlus && (
+                  <span className="act-lock" aria-hidden="true"><Icon.Lock size={12} /></span>
+                )}
               </button>
-              <button className="action-btn act-pass" onClick={() => topId && handleSwipe(topId, false)} aria-label="Pasar">
-                <Icon.X />
-              </button>
-              <button className="action-btn act-super" onClick={() => topId && handleSwipe(topId, true, true)} aria-label="Super like">
-                <Icon.Star />
-              </button>
-              <button className="action-btn act-like" onClick={() => topId && handleSwipe(topId, true)} aria-label="Me gusta">
-                <Icon.Heart />
-              </button>
+
+              <div className="swipe-actions-main">
+                <button className="action-btn act-pass" onClick={() => topId && handleSwipe(topId, false)} aria-label="Pasar">
+                  <Icon.X />
+                </button>
+                <button className="action-btn act-super" onClick={() => topId && handleSwipe(topId, true, true)} aria-label="Super like">
+                  <Icon.Star />
+                </button>
+                <button className="action-btn act-like" onClick={() => topId && handleSwipe(topId, true)} aria-label="Me gusta">
+                  <Icon.Heart />
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -292,7 +364,7 @@ export default function SwipePage({ user }) {
             <Icon.Sparkles size={22} />
             <strong>SwapWear+</strong>
             <span>Swaps y prendas sin límite, y aparecés primero.</span>
-            <button className="btn-primary" onClick={() => setShowSub(true)}>Conocer SwapWear+</button>
+            <button className="btn-primary" onClick={() => openSub()}>Conocer SwapWear+</button>
           </div>
         )}
       </aside>

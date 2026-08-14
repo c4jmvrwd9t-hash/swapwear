@@ -249,6 +249,23 @@ app.post('/api/swipe', (req, res) => {
   res.json({ success: true });
 });
 
+// Deshacer un swipe (rewind de SwapWear+). Borra la fila para que la prenda
+// vuelva al feed en la próxima carga y el cupo diario se devuelva — sin esto
+// el rewind sería sólo visual y el swipe seguiría contando.
+app.delete('/api/swipe', (req, res) => {
+  const uid = parseInt(req.body.user_id);
+  const iid = parseInt(req.body.item_id);
+  if (!uid || !iid) return res.status(400).json({ error: 'Faltan datos' });
+
+  const db = readDb();
+  const before = (db.swipes || []).length;
+  db.swipes = (db.swipes || []).filter(s => !(s.user_id === uid && s.item_id === iid));
+  if (db.swipes.length === before) return res.status(404).json({ error: 'Swipe no encontrado' });
+
+  writeDb(db);
+  res.json({ success: true });
+});
+
 // Get daily swipe stats
 app.get('/api/stats', (req, res) => {
   const uid = parseInt(req.query.user_id);
