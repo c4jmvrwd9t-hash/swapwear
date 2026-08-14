@@ -249,7 +249,9 @@ body {
 .action-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: var(--shadow); }
 .action-btn:active:not(:disabled) { transform: scale(0.92); }
 .action-btn:disabled { opacity: 0.4; cursor: default; }
-.act-undo { width: 46px; height: 46px; color: var(--ink-3); }
+/* --ink y no --ink-3: la flecha de referencia es casi negra y a 22px el gris
+   medio la desdibujaba. El estado bloqueado sí se atenúa (ver .is-locked). */
+.act-undo { width: 46px; height: 46px; color: var(--ink); }
 .act-pass { width: 58px; height: 58px; color: var(--rose-deep); }
 .act-super { width: 50px; height: 50px; color: var(--lilac); }
 .act-like {

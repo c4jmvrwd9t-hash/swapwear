@@ -28,8 +28,15 @@ function S({ children, size = 24, fill = 'none', stroke = true, ...rest }) {
 export const Icon = {
   Heart: (p) => <S {...p}><path d="M19 14c1.5-1.5 3-3.3 3-5.5A4.5 4.5 0 0 0 12 5 4.5 4.5 0 0 0 2 8.5C2 13 12 21 12 21s4.5-3.6 7-7Z" /></S>,
   X: (p) => <S {...p}><path d="M18 6 6 18M6 6l12 12" /></S>,
-  // rotate-ccw de Lucide: flecha curva antihoraria, se lee como "volver atrás"
-  Undo: (p) => <S {...p}><path d="M3 2v6h6" /><path d="M3 8a9 9 0 1 0 3-7.7L3 8" /></S>,
+  // Flecha de deshacer: círculo casi cerrado con la punta en gancho arriba a la
+  // izquierda. strokeWidth propio (2.4) porque el 1.9 del set base la deja
+  // demasiado fina para leerse a 22px dentro del botón.
+  Undo: (p) => (
+    <S strokeWidth="2.4" {...p}>
+      <path d="M5.6 8.6A8 8 0 1 1 4.1 12.8" />
+      <path d="M5.6 3.6 5.6 8.7 10.7 8.7" />
+    </S>
+  ),
   Lock: (p) => <S {...p}><rect x="4" y="10.5" width="16" height="10" rx="2.5" /><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" /></S>,
   Star: (p) => <S {...p}><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.1l1-5.8L3.5 9.2l5.9-.9L12 3Z" /></S>,
   Inbox: (p) => <S {...p}><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.7 4H7.3a2 2 0 0 0-1.8 1.1Z" /></S>,
