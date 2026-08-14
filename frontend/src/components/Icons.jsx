@@ -28,13 +28,14 @@ function S({ children, size = 24, fill = 'none', stroke = true, ...rest }) {
 export const Icon = {
   Heart: (p) => <S {...p}><path d="M19 14c1.5-1.5 3-3.3 3-5.5A4.5 4.5 0 0 0 12 5 4.5 4.5 0 0 0 2 8.5C2 13 12 21 12 21s4.5-3.6 7-7Z" /></S>,
   X: (p) => <S {...p}><path d="M18 6 6 18M6 6l12 12" /></S>,
-  // Flecha de deshacer: círculo casi cerrado con la punta en gancho arriba a la
-  // izquierda. strokeWidth propio (2.4) porque el 1.9 del set base la deja
-  // demasiado fina para leerse a 22px dentro del botón.
+  // Flecha de deshacer: círculo casi cerrado con punta de flecha arriba a la
+  // izquierda, apuntando hacia AFUERA. La versión anterior usaba un corchete
+  // en L cuya pata horizontal entraba al círculo y a 22px se leía como un
+  // palito cruzándolo. strokeWidth 2.4 porque el 1.9 del set queda muy fino.
   Undo: (p) => (
     <S strokeWidth="2.4" {...p}>
-      <path d="M5.6 8.6A8 8 0 1 1 4.1 12.8" />
-      <path d="M5.6 3.6 5.6 8.7 10.7 8.7" />
+      <path d="M4.6 10.2A8 8 0 1 1 4.3 13.6" />
+      <path d="M8.6 9.4 4.4 10.3 3.5 6.1" />
     </S>
   ),
   Lock: (p) => <S {...p}><rect x="4" y="10.5" width="16" height="10" rx="2.5" /><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" /></S>,
