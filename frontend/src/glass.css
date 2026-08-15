@@ -140,7 +140,7 @@ body {
 }
 
 .ex-rail { display: none; }            /* ocultas en mobile */
-.ex-center { display: flex; flex-direction: column; gap: 0.6rem; flex: 1; min-height: 0; width: 100%; }
+.ex-center { position: relative; display: flex; flex-direction: column; gap: 0.6rem; flex: 1; min-height: 0; width: 100%; }
 
 /* Carta de prenda en vidrio */
 .swipe-card {
@@ -595,7 +595,19 @@ body {
   display: grid; place-items: center; border-radius: 999px;
   background: var(--grad-strong); color: #fff; font-size: 0.7rem; font-weight: 700;
 }
-.chat-row-thumb { width: 50px; height: 50px; border-radius: var(--r-sm); object-fit: cover; flex-shrink: 0; }
+/* Miniatura de la prenda: cuadrada de verdad. Antes usaba --r-sm (13px sobre
+   50px = 26% del lado), que la hacía leer como squircle y competía con el
+   avatar redondo. El avatar sigue siendo círculo a propósito: círculo =
+   persona, cuadrado = prenda. */
+.chat-row-thumb {
+  width: 50px;
+  height: 50px;
+  aspect-ratio: 1 / 1;
+  border-radius: 9px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(40, 20, 60, 0.06);
+}
 .chat-row-del {
   width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%;
   display: grid; place-items: center; border: none; cursor: pointer;

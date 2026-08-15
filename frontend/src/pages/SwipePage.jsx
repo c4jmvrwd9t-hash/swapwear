@@ -172,6 +172,23 @@ export default function SwipePage({ user }) {
     }
   };
 
+  // Los toasts flotan dentro del área de la carta: como .card-stack ya es
+  // position:relative, quedan bien ubicados en cualquier ancho sin números
+  // mágicos. Antes iban en el flujo de .ex-center y le robaban ~42px de alto
+  // al stack durante 1.1s, así que la carta se encogía en cada swipe.
+  const toasts = (
+    <>
+      {notice && (
+        <div className="action-toast toast-pass" role="status" aria-live="polite">{notice}</div>
+      )}
+      {lastAction && (
+        <div className={`action-toast ${lastAction.liked ? 'toast-like' : 'toast-pass'}`} role="status" aria-live="polite">
+          {lastAction.isSuper ? '★ Super like' : lastAction.liked ? 'Me gusta' : 'Pasaste'}
+        </div>
+      )}
+    </>
+  );
+
   const activeFilterCount = (filters.garment_type ? 1 : 0) + filters.tags.length;
   const remaining = unlimited ? '∞' : Math.max(0, dailyLimit - todayCount);
   const progress  = unlimited ? 0 : Math.min(todayCount / dailyLimit, 1);
@@ -285,20 +302,10 @@ export default function SwipePage({ user }) {
           </div>
         )}
 
-        {/* Aviso corto del rewind */}
-        {notice && (
-          <div className="action-toast toast-pass" role="status" aria-live="polite">{notice}</div>
-        )}
-
-        {/* Toast */}
-        {lastAction && (
-          <div className={`action-toast ${lastAction.liked ? 'toast-like' : 'toast-pass'}`} role="status" aria-live="polite">
-            {lastAction.isSuper ? '★ Super like' : lastAction.liked ? 'Me gusta' : 'Pasaste'}
-          </div>
-        )}
 
         {(empty || feed.length === 0) ? (
-          <div className="end-state" style={{ flex: 1 }}>
+          <div className="end-state" style={{ flex: 1, position: 'relative' }}>
+            {toasts}
             <div className="end-icon-wrap">{activeFilterCount > 0 ? <Icon.Search size={38} /> : <Icon.Sparkles size={38} />}</div>
             <h2>{activeFilterCount > 0 ? 'Sin resultados' : 'Lo viste todo'}</h2>
             <p>{activeFilterCount > 0 ? 'No hay prendas con esos filtros.' : 'No quedan más prendas por explorar.'}</p>
@@ -309,6 +316,7 @@ export default function SwipePage({ user }) {
         ) : (
           <>
             <div className="card-stack">
+              {toasts}
               {feed.slice(0, 4).map((item, index) => (
                 <SwipeCard
                   key={item.id}

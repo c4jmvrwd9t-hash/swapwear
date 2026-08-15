@@ -99,9 +99,11 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex, enterFrom 
     cardStyle.transform = `translateX(${delta}px) rotate(${rotation}deg)`;
     if (enterFrom && !dragging) cardStyle.transition = 'transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.42s ease';
   } else {
-    const scale = 1 - stackIndex * 0.04;
-    cardStyle.transform = `scale(${scale}) translateY(${stackIndex * 12}px)`;
-    cardStyle.filter = `brightness(${1 - stackIndex * 0.07})`;
+    // Las cards del stack miden lo mismo que la activa (como en Tinder): la
+    // profundidad la dan el offset y la opacidad, nunca la escala. El scale()
+    // anterior las achicaba y producía un salto de tamaño al avanzar el índice.
+    cardStyle.transform = `translateY(${stackIndex * 8}px)`;
+    cardStyle.opacity = 1 - stackIndex * 0.14;
   }
 
   return (
