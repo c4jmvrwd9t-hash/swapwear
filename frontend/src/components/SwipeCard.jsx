@@ -99,11 +99,11 @@ export default function SwipeCard({ item, onSwipe, isTop, stackIndex, enterFrom 
     cardStyle.transform = `translateX(${delta}px) rotate(${rotation}deg)`;
     if (enterFrom && !dragging) cardStyle.transition = 'transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.42s ease';
   } else {
-    // Las cards del stack miden lo mismo que la activa (como en Tinder): la
-    // profundidad la dan el offset y la opacidad, nunca la escala. El scale()
-    // anterior las achicaba y producía un salto de tamaño al avanzar el índice.
-    cardStyle.transform = `translateY(${stackIndex * 8}px)`;
-    cardStyle.opacity = 1 - stackIndex * 0.14;
+    // La siguiente prenda queda EXACTAMENTE donde va a quedar cuando le toque:
+    // mismo tamaño, misma posición, misma opacidad. Al swipear se revela, no
+    // se acerca. Cualquier scale/offset/fade aquí produce ese movimiento de
+    // "llegada" que no queremos: la carta sólo cambia de z-index.
+    cardStyle.transform = 'none';
   }
 
   return (

@@ -1209,6 +1209,29 @@ body {
   justify-content: center;
 }
 
+/* Peek del stack.
+   Silueta estática, NO una card: así la profundidad no depende de mover
+   ninguna carta. Las cards reales viven todas en inset:0 con el mismo tamaño
+   y sólo cambian de z-index, por lo que al promoverse no se desplazan ni un
+   píxel. Un translateY sobre la card de atrás daría el mismo efecto visual
+   pero la obligaría a recorrer esa distancia al pasar al frente. */
+.card-stack::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin-inline: auto;
+  max-width: 380px;
+  transform: translateY(9px);
+  border-radius: var(--lg-radius, 8px);
+  background: #EFECE6;
+  border: 1px solid rgba(27, 42, 74, 0.10);
+  box-shadow: 0 10px 26px -14px rgba(27, 42, 74, 0.30);
+  z-index: 0;
+  pointer-events: none;
+}
+/* Sin cartas no hay pila que insinuar */
+.card-stack:empty::after { display: none; }
+
 /* Swipe card */
 .swipe-card {
   position: absolute;
