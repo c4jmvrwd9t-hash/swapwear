@@ -149,7 +149,9 @@ body {
   -webkit-backdrop-filter: var(--blur);
   border: 1px solid var(--glass-brd);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow);
+  /* La card de swipe va sin sombra (ver liquid.css). Se anula acá también
+     para que no reaparezca si cambia el orden de imports. */
+  box-shadow: none;
 }
 .card-img-wrapper { border-radius: var(--r-lg) var(--r-lg) 0 0; }
 

@@ -1207,6 +1207,11 @@ body {
   min-height: 0;
   display: flex;
   justify-content: center;
+  /* Aire hasta los botones. Va acá y no como padding en .swipe-actions
+     porque el trío de acciones está posicionado en absoluto y centrado:
+     el padding lo recentra y sólo gana la mitad. El margen sale del alto
+     del stack (flex:1), así que todas las cards siguen midiendo igual. */
+  margin-bottom: 1.6rem;
 }
 
 /* Peek del stack.
@@ -1221,11 +1226,12 @@ body {
   inset: 0;
   margin-inline: auto;
   max-width: 380px;
-  transform: translateY(9px);
+  transform: translateY(8px);
   border-radius: var(--lg-radius, 8px);
-  background: #EFECE6;
-  border: 1px solid rgba(27, 42, 74, 0.10);
-  box-shadow: 0 10px 26px -14px rgba(27, 42, 74, 0.30);
+  /* Sin relleno ni sombra: antes era un bloque sólido del tamaño de la card
+     que asomaba como una mancha gris. Ahora sólo se ve el filo inferior. */
+  background: none;
+  border: 1px solid rgba(27, 42, 74, 0.13);
   z-index: 0;
   pointer-events: none;
 }
@@ -1363,7 +1369,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  /* Never shrinks → the ✗ / ❤️ buttons are always fully visible above the nav */
+    /* Never shrinks → the ✗ / ❤️ buttons are always fully visible above the nav */
   flex-shrink: 0;
   padding: 0.4rem 0 0.2rem;
 }
